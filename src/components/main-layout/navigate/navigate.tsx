@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
-import { changeMenu, changeOpenCategory } from '../../../store/reducer/actions';
-import { IState } from '../../../store/reducer/type';
+import { useGetBooksQuery, useGetCategoriesQuery } from '../../../store/books-info-api';
+import { changeMenu, changeOpenCategory } from '../../../store/reducers/main-slice';
+
+import { IState } from '../../../store/reducers/type';
 
 import {
   AccordionButton,
@@ -18,10 +20,7 @@ import {
   NavigateProfile,
 } from './navigate.styled';
 
-import { useMakeNavigate } from './use-make-navigate';
-
 export const Navigate = () => {
-  const categoryBooks = useMakeNavigate();
 
   const dispatch = useDispatch();
 
@@ -29,13 +28,19 @@ export const Navigate = () => {
 
   const isSelectedBook = location.pathname.includes('books');
 
-  const { isOpenCategory } = useSelector((state: IState) => state.mainReducer);
+  const { isOpenCategory } = useSelector((state: IState) => state.reducer);
 
   function handlerClick(event: { currentTarget: any }) {
     const payload = event.currentTarget.dataset.info;
     dispatch(changeMenu(payload));
     event.currentTarget.classList.add('active');
+    if (!isSelectedBook && isOpenCategory) {
+      dispatch(changeOpenCategory(!isOpenCategory));
+    }
   }
+
+  const { data = [], isSuccess: isSuccessCategories } = useGetCategoriesQuery();
+  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
   return (
     <NavigateContainer>
@@ -51,21 +56,29 @@ export const Navigate = () => {
           >
             Витрина книг
           </NavigateBookLink>
-          <AccordionButton className={!isSelectedBook ? 'hidden' : isOpenCategory ? 'open' : ''} />
+          <AccordionButton className={!isSelectedBook || !isSuccessCategories || !isSuccessBooks ? 'hidden' : isOpenCategory ? 'open' : ''} />
         </NavigateItem>
-        <NavigateCategories className={!isSelectedBook ? '' : isOpenCategory ? 'active' : ''}>
-          {categoryBooks.map((category) => (
-            <NavigateCategory key={category.id}>
+        {isSuccessCategories && isSuccessBooks ? (<NavigateCategories className={!isSelectedBook ? '' : isOpenCategory ? 'active' : ''}>
+          <NavigateCategory>
+            <NavigateLink
+              to='books/all'
+              data-test-id='navigation-books'
+            >
+              Все книги
+            </NavigateLink>
+          </NavigateCategory>
+          {data.map((item: any) => (
+            <NavigateCategory key={item.id}>
               <NavigateLink
-                to={category.to}
+                to={`books/${item.path}`}
                 data-test-id='navigation-books'
               >
-                {category.title}
+                {item.name}
               </NavigateLink>
-              <NavigateBooksCount>{category.count}</NavigateBooksCount>
             </NavigateCategory>
           ))}
-        </NavigateCategories>
+        </NavigateCategories>) : ''}
+
         <NavigateItem onClick={(event) => handlerClick(event)} data-info='rules'>
           <NavigateLinkItem to='rules' data-test-id='navigation-terms'>
             Правила пользования

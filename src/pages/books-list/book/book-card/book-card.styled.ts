@@ -10,7 +10,7 @@ export const BooksCard = styled(Link)`
   &.tail{
     max-width: 190px;
     height: 470px;
-    grid-template-rows: 5.5fr 1fr 1fr 1fr;
+    row-gap: 16px;
     padding: 0 8px 16px 8px;
       @media screen and (max-width: 770px) {
         grid-template-rows: 5fr 1fr 1fr 1fr;
@@ -34,7 +34,7 @@ export const BooksCard = styled(Link)`
      ". image author ."
      ". image rating button";
      grid-template-columns: 3% 16% 57%;
-     grid-template-rows: 30% 42% 0% 0%;
+     grid-template-rows: 39% 35% 0% 0%;
      padding: 24px 0;
       @media screen and (max-width: 770px) {
         max-width: 640px;
@@ -56,7 +56,7 @@ export const BooksCard = styled(Link)`
         ". image rating"
         ". image button";
         grid-template-columns: 3% 27% 70%;
-        grid-template-rows: 26% 15% 27% 10%;
+        grid-template-rows: 26% 26% 21% 10%;
       }
    }
 `;
@@ -111,6 +111,11 @@ export const BookTitle = styled.p`
   &.tail{
     padding: 0 0 0 8px;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
       @media screen and (max-width: 770px) {
         font-weight: 700;
         font-size: 12px;
@@ -127,6 +132,11 @@ export const BookTitle = styled.p`
     font-weight: 700;
     font-size: 22px;
     line-height: 32px;
+        overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
       @media screen and (max-width: 770px) {
         font-size: 24px;
         line-height: 30px;
@@ -143,6 +153,11 @@ export const BookAuthor = styled.p`
   color: #727272;
   &.tail{
     padding: 0 0 0 8px;
+      overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
       @media screen and (max-width: 770px) {
         font-weight: 700;
         font-size: 12px;
@@ -158,6 +173,11 @@ export const BookAuthor = styled.p`
     grid-area: author;
     font-size: 16px;
     line-height: 24px;
+        overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
       @media screen and (max-width: 330px) {
         font-size: 12px;
         line-height: 18px;

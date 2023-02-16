@@ -5,12 +5,12 @@ import { Layout } from './common/layout/layout';
 import { MainLayout } from './components/main-layout/main-layout';
 import { BooksList } from './pages/books-list/books-list';
 import { Documentation } from './pages/documentation/documentation';
-import { BookPage } from './pages/book-page/book-page';
-import { IState } from './store/reducer/type';
+import { IState } from './store/reducers/type';
+import { BookPageContainer } from './pages/book-page/book-page-container';
 
 export const App = () => {
 
-  const { currentItemMenu } = useSelector((state: IState) => state.mainReducer);
+  const { currentItemMenu } = useSelector((state: IState) => state.reducer);
 
   return (
     <Routes>
@@ -21,7 +21,7 @@ export const App = () => {
           <Route path='rules' element={<Documentation title={currentItemMenu} />} />
           <Route path='offer' element={<Documentation title={currentItemMenu} />} />
         </Route>
-        <Route path='books/:category/:bookId' element={<BookPage />} />
+        <Route path='books/:category/:bookId' element={<BookPageContainer />} />
       </Route>
     </Routes>
   )

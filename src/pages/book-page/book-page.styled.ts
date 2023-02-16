@@ -23,7 +23,7 @@ export const BookInfo = styled.div`
    "image description"
    "image description";
   grid-template-columns: 3fr 4fr;
-  grid-template-rows: 11% 9% 17% 12% 9%;
+  grid-template-rows: 32% 8% 16% 8% 10%;
   margin: 42px 0 65px 0;
   max-height: 658px;
     @media screen and (max-width: 1180px) {

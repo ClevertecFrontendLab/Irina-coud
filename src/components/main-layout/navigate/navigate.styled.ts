@@ -16,7 +16,6 @@ export const NavigateContainer = styled.nav`
 `;
 
 export const NavigateList = styled.ul<IMenuItem>`
-  width: 100%;
   >li:first-child{
     margin: 0 0 40px 0;
   }

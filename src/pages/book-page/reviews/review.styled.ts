@@ -27,6 +27,11 @@ export const ReviewerInfo = styled.ul`
     @media screen and (max-width: 770px) {
       gap: 24px;
     }
+    img{
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
 `;
 
 export const ReviewerInfoBox = styled.div`

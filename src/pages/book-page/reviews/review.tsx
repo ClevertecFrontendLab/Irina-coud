@@ -2,22 +2,38 @@ import { Rating } from '../../books-list/book/book-card/rating/rating';
 
 import { ReviewContainer, ReviewerInfo, ReviewerInfoBox } from './review.styled';
 
-import { IReviewer } from './use-make-review'
 
 import reviewerPhoto from '../../../assets/icon/reviewer-photo.png';
 
 
-export const Review = (props: IReviewer) => {
+export interface IReviewer {
+  createdAt: string;
+  id: number;
+  rating: number;
+  text: string;
+  user: {
+    avatarUrl: null | string;
+    commentUserId: number;
+    firstName: string;
+    lastName: string;
+  }
+}
 
-  const { name, text, dataTime } = props;
+export const Review = ({ item }: { item: IReviewer }) => {
+
+  const { text, user, createdAt } = item;
+
+  // const dataTime = new Date(createdAt)
+
+  const host = 'https://strapi.cleverland.by';
 
   return (
     <ReviewContainer>
       <ReviewerInfo>
-        <li><img src={reviewerPhoto} alt="avatar" /></li>
+        <li><img src={user.avatarUrl ? `${host}${user.avatarUrl}` : reviewerPhoto} alt="avatar" /></li>
         <ReviewerInfoBox>
-          <li>{name}</li>
-          <li>{dataTime}</li>
+          <li>{`${user.firstName} ${user.lastName}`}</li>
+          <li>{createdAt}</li>
         </ReviewerInfoBox>
       </ReviewerInfo>
       <Rating />

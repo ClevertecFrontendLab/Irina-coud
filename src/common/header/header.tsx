@@ -12,12 +12,12 @@ import {
 } from './header.styled';
 import avatar from '../../assets/image/avatar.png';
 import logo from '../../assets/icon/logo.png';
-import { IState } from '../../store/reducer/type';
-import { changeBurgerMenu } from '../../store/reducer/actions';
+import { IState } from '../../store/reducers/type';
 import { Burger } from './burger/burger';
+import { changeBurgerMenu } from '../../store/reducers/main-slice';
 
 export const Header = () => {
-  const { isBurgerMenuOpen } = useSelector((state: IState) => state.mainReducer);
+  const { isBurgerMenuOpen } = useSelector((state: IState) => state.reducer);
   const dispatch = useDispatch();
 
   function toggleBurgerMenu() {

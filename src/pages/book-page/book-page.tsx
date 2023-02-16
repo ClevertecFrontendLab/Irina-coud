@@ -4,7 +4,7 @@ import { Slider } from './swiper/swiper';
 
 import { BreadCrumbs } from './bread-crumbs/bread-crumbs';
 
-import { Review } from './reviews/review';
+import { IReviewer, Review } from './reviews/review';
 import {
   AccordionButton,
   BookAuthor,
@@ -27,33 +27,52 @@ import {
 } from './book-page.styled';
 import { Rating } from '../books-list/book/book-card/rating/rating';
 
-import { useMakeReview } from './reviews/use-make-review';
 
-import { IState } from '../../store/reducer/type';
-import { changeOpenReview } from '../../store/reducer/actions';
+import { IState } from '../../store/reducers/type';
 
-import { cardInfo } from '../../constants/book-info';
+import { changeOpenReview } from '../../store/reducers/main-slice';
 
-export const BookPage = () => {
 
-  const [{ title, author, rating, description }] = cardInfo;
+export interface IBookInfo {
+  ISBN: string;
+  authors: [string];
+  booking: null;
+  categories: [string];
+  comments: null | [];
+  cover: string;
+  delivery: null;
+  description: string;
+  format: string;
+  histories: null;
+  id: number;
+  images: [{ url: string }];
+  issueYear: string;
+  pages: string;
+  producer: string;
+  publish: string;
+  rating: null;
+  title: string;
+  weight: string;
+}
+
+export const BookPage = ({ data }: { data: IBookInfo }) => {
 
   const dispatch = useDispatch()
 
-  const reviewers = useMakeReview();
+  const { isOpenReview } = useSelector((state: IState) => state.reducer);
 
-  const { isOpenReview } = useSelector((state: IState) => state.mainReducer);
+  const { title, authors, rating, description, ISBN, publish, pages, cover, weight, format, producer, issueYear, categories, images, comments } = data;
 
   return (
     <React.Fragment>
-      <BreadCrumbs />
+      <BreadCrumbs title={title} categories={categories} />
       <BookPageWrapper>
         <BookInfo>
           <BookImageBox>
-            <Slider />
+            <Slider images={images} />
           </BookImageBox>
           <BookTitle>{title}</BookTitle>
-          <BookAuthor>{author}</BookAuthor>
+          <BookAuthor>{authors}</BookAuthor>
           <BookBtnBooking>Забронировать</BookBtnBooking>
           <BookSubtitle>О книге</BookSubtitle>
           <BookDescriptionText>{description}</BookDescriptionText>
@@ -74,11 +93,11 @@ export const BookPage = () => {
               <li>Формат</li>
             </BookDetailListTitle>
             <BookDetailList>
-              <li>Питер</li>
-              <li>2019</li>
-              <li>288</li>
-              <li>Мягкая обложка</li>
-              <li>70х100</li>
+              <li>{publish}</li>
+              <li>{issueYear}</li>
+              <li>{pages}</li>
+              <li>{cover}</li>
+              <li>{format}</li>
             </BookDetailList>
           </BookDetailInfo>
           <BookDetailInfo>
@@ -89,20 +108,23 @@ export const BookPage = () => {
               <li>Изготовитель</li>
             </BookDetailListTitle>
             <BookDetailList>
-              <li>Компьютерная литература</li>
-              <li>370 г</li>
-              <li>978-5-4461-0923-4</li>
-              <li>ООО Питер Мейл. РФ, 198206, г.Санкт-Петербург, Петергофское ш, д.73, лит. А29</li>
+              <li>{categories}</li>
+              <li>{weight}</li>
+              <li>{ISBN}</li>
+              <li>{producer}</li>
             </BookDetailList>
           </BookDetailInfo>
         </BookDetailInfoContainer>
         <ReviewsContainer>
-          <BookSubtitle>Отзывы <span>2</span></BookSubtitle>
-          <AccordionButton className={isOpenReview ? 'open' : ''} onClick={() => dispatch(changeOpenReview(!isOpenReview))} data-test-id='button-hide-reviews' />
-          <ReviewBox className={isOpenReview ? '' : 'close'}>{reviewers.map((item) => (<Review id={item.id} name={item.name} dataTime={item.dataTime} text={item.text} />))}</ReviewBox>
+          <BookSubtitle>Отзывы <span>{comments ? comments.length : '0'}</span></BookSubtitle>
+          {comments && (<React.Fragment> <AccordionButton className={isOpenReview ? 'open' : ''} onClick={() => dispatch(changeOpenReview(!isOpenReview))} data-test-id='button-hide-reviews' />
+            <ReviewBox className={isOpenReview ? '' : 'close'}>{comments?.map((item: IReviewer) => (
+              <Review key={item.id} item={item} />))}
+            </ReviewBox></React.Fragment>)}
         </ReviewsContainer>
         <BookBtnReview data-test-id='button-rating'>Оценить книгу</BookBtnReview>
       </BookPageWrapper>
     </React.Fragment>
+
   )
 };

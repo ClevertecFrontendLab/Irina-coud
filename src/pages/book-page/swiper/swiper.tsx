@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+
 import { Navigation, FreeMode, Thumbs, Scrollbar, Pagination } from 'swiper';
 import { Swiper } from 'swiper/react';
 
@@ -7,8 +7,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { cardInfo } from '../../../constants/book-info';
-import { IState } from '../../../store/reducer/type';
 
 import {
   ImageSlider,
@@ -19,13 +17,19 @@ import {
   SliderPagination,
 } from './swiper.styled';
 
-export const Slider = () => {
+import emptyCat from '../../../assets/image/empty.jpg';
+
+export interface ISliderImage {
+  images: [{ url: string }]
+}
+
+export const Slider = (props: ISliderImage) => {
 
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
-  const { idCurrentBook } = useSelector((state: IState) => state.mainReducer);
+  const url = props.images;
 
-  const [{ url }] = cardInfo.filter((item) => item.id === idCurrentBook);
+  const host = 'https://strapi.cleverland.by';
 
   return (
     <React.Fragment>
@@ -47,7 +51,7 @@ export const Slider = () => {
           }}
           data-test-id='slide-big'>
           {url.map((item) => (
-            <StyledSwiperSlide data-test-id='slide-mini'><ImageSlider src={item} alt='sliderImage' /></StyledSwiperSlide>
+            <StyledSwiperSlide data-test-id='slide-mini'><ImageSlider src={item.url ? `${host}${item.url}` : `${emptyCat}`} alt='sliderImage' /></StyledSwiperSlide>
           ))}
         </StyledMainSwiper>
       </StyledSwiperWrapper>
@@ -68,7 +72,7 @@ export const Slider = () => {
             data-test-id='slide-mini'
           >
             {url.map((item) => (
-              <StyledSwiperSlide data-test-id='slide-mini'><img src={item} alt='sliderImage' height='86' /></StyledSwiperSlide>
+              <StyledSwiperSlide data-test-id='slide-mini'><img src={item.url ? `${host}${item.url}` : ''} alt='sliderImage' height='86' /></StyledSwiperSlide>
             ))}
           </Swiper>
         </StyledScrollSwiperWrapper>

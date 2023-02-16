@@ -4,15 +4,22 @@ import { BookCard } from './book-card/book-card';
 
 import { BooksWrapper } from './books-container.styled';
 
-import { IState } from '../../../store/reducer/type';
+import { IState } from '../../../store/reducers/type';
+import { useGetBooksQuery, useGetCategoriesQuery } from '../../../store/books-info-api';
 
 export const BooksContainer = () => {
 
-  const { isActiveTail } = useSelector((state: IState) => state.mainReducer);
+  const { isActiveTail } = useSelector((state: IState) => state.reducer);
+
+  const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
+  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
+
 
   return (
     <BooksWrapper className={isActiveTail ? 'tail' : 'list'} >
-      <BookCard />
+      {isSuccessCategories && isSuccessBooks ? (
+        <BookCard />
+      ) : ''}
     </BooksWrapper>
   )
 };

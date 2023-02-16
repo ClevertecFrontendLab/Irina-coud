@@ -7,4 +7,6 @@ export const WrapperContent = styled.div`
   justify-content: center;
   margin: 0 auto;
   column-gap: 9px;
+  min-height: calc(100vh - 278px);
+    justify-content: space-between;
 `;

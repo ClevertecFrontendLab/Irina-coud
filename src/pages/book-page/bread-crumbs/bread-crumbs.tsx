@@ -1,16 +1,9 @@
 import { BreadCrumbsContainer, BreadCrumbsItem } from './bread-crumbs.styled';
 
-import { cardInfo } from '../../../constants/book-info';
-
-export const BreadCrumbs = () => {
-
-  const [{ category, title }] = cardInfo;
-
-  return (
-    <BreadCrumbsContainer>
-      <BreadCrumbsItem to='/'>{category}</BreadCrumbsItem>
-      <p>/</p>
-      <p>{title}</p>
-    </BreadCrumbsContainer>
-  )
-};
+export const BreadCrumbs = ({ title, categories }: { title: string, categories: [string] }) => (
+  <BreadCrumbsContainer>
+    <BreadCrumbsItem to='/'>{categories}</BreadCrumbsItem>
+    <p>/</p>
+    <p>{title}</p>
+  </BreadCrumbsContainer>
+);
