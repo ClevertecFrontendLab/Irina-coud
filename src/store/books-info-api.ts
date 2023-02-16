@@ -31,3 +31,4 @@ export const booksInfoApi = createApi({
 });
 
 export const { useGetBooksQuery, useGetBookQuery, useGetCategoriesQuery } = booksInfoApi;
+
