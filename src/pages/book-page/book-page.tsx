@@ -2,8 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Slider } from './swiper/swiper';
 
-import { BreadCrumbs } from './bread-crumbs/bread-crumbs';
-
 import { IReviewer, Review } from './reviews/review';
 import {
   AccordionButton,
@@ -64,67 +62,63 @@ export const BookPage = ({ data }: { data: IBookInfo }) => {
   const { title, authors, rating, description, ISBN, publish, pages, cover, weight, format, producer, issueYear, categories, images, comments } = data;
 
   return (
-    <React.Fragment>
-      <BreadCrumbs title={title} categories={categories} />
-      <BookPageWrapper>
-        <BookInfo>
-          <BookImageBox>
-            <Slider images={images} />
-          </BookImageBox>
-          <BookTitle>{title}</BookTitle>
-          <BookAuthor>{authors}</BookAuthor>
-          <BookBtnBooking>Забронировать</BookBtnBooking>
-          <BookSubtitle>О книге</BookSubtitle>
-          <BookDescriptionText>{description}</BookDescriptionText>
-        </BookInfo>
-        <BookSubtitle>Рейтинг</BookSubtitle>
-        <BookRatingBox>
-          <Rating />
-          <span>{rating}</span>
-        </BookRatingBox>
-        <BookSubtitle>Подробная информация</BookSubtitle>
-        <BookDetailInfoContainer>
-          <BookDetailInfo>
-            <BookDetailListTitle>
-              <li>Издательство</li>
-              <li>Год издания</li>
-              <li>Страниц</li>
-              <li>Переплёт</li>
-              <li>Формат</li>
-            </BookDetailListTitle>
-            <BookDetailList>
-              <li>{publish}</li>
-              <li>{issueYear}</li>
-              <li>{pages}</li>
-              <li>{cover}</li>
-              <li>{format}</li>
-            </BookDetailList>
-          </BookDetailInfo>
-          <BookDetailInfo>
-            <BookDetailListTitle>
-              <BookDetailListTitleItem>Жанр</BookDetailListTitleItem>
-              <li>Вес</li>
-              <li>ISBN</li>
-              <li>Изготовитель</li>
-            </BookDetailListTitle>
-            <BookDetailList>
-              <li>{categories}</li>
-              <li>{weight}</li>
-              <li>{ISBN}</li>
-              <li>{producer}</li>
-            </BookDetailList>
-          </BookDetailInfo>
-        </BookDetailInfoContainer>
-        <ReviewsContainer>
-          <BookSubtitle>Отзывы <span>{comments ? comments.length : '0'}</span></BookSubtitle>
-          {comments && (<React.Fragment> <AccordionButton className={isOpenReview ? 'open' : ''} onClick={() => dispatch(changeOpenReview(!isOpenReview))} data-test-id='button-hide-reviews' />
-            <ReviewBox className={isOpenReview ? '' : 'close'}>{comments?.map((item: IReviewer) => (
-              <Review key={item.id} item={item} />))}
-            </ReviewBox></React.Fragment>)}
-        </ReviewsContainer>
-        <BookBtnReview data-test-id='button-rating'>Оценить книгу</BookBtnReview>
-      </BookPageWrapper>
-    </React.Fragment>
-
+    <BookPageWrapper>
+      <BookInfo>
+        <BookImageBox>
+          <Slider images={images} />
+        </BookImageBox>
+        <BookTitle>{title}</BookTitle>
+        <BookAuthor>{authors}</BookAuthor>
+        <BookBtnBooking>Забронировать</BookBtnBooking>
+        <BookSubtitle>О книге</BookSubtitle>
+        <BookDescriptionText>{description}</BookDescriptionText>
+      </BookInfo>
+      <BookSubtitle>Рейтинг</BookSubtitle>
+      <BookRatingBox>
+        <Rating />
+        <span>{rating}</span>
+      </BookRatingBox>
+      <BookSubtitle>Подробная информация</BookSubtitle>
+      <BookDetailInfoContainer>
+        <BookDetailInfo>
+          <BookDetailListTitle>
+            <li>Издательство</li>
+            <li>Год издания</li>
+            <li>Страниц</li>
+            <li>Переплёт</li>
+            <li>Формат</li>
+          </BookDetailListTitle>
+          <BookDetailList>
+            <li>{publish}</li>
+            <li>{issueYear}</li>
+            <li>{pages}</li>
+            <li>{cover}</li>
+            <li>{format}</li>
+          </BookDetailList>
+        </BookDetailInfo>
+        <BookDetailInfo>
+          <BookDetailListTitle>
+            <BookDetailListTitleItem>Жанр</BookDetailListTitleItem>
+            <li>Вес</li>
+            <li>ISBN</li>
+            <li>Изготовитель</li>
+          </BookDetailListTitle>
+          <BookDetailList>
+            <li>{categories}</li>
+            <li>{weight}</li>
+            <li>{ISBN}</li>
+            <li>{producer}</li>
+          </BookDetailList>
+        </BookDetailInfo>
+      </BookDetailInfoContainer>
+      <ReviewsContainer>
+        <BookSubtitle>Отзывы <span>{comments ? comments.length : '0'}</span></BookSubtitle>
+        {comments && (<React.Fragment> <AccordionButton className={isOpenReview ? 'open' : ''} onClick={() => dispatch(changeOpenReview(!isOpenReview))} data-test-id='button-hide-reviews' />
+          <ReviewBox className={isOpenReview ? '' : 'close'}>{comments?.map((item: IReviewer) => (
+            <Review key={item.id} item={item} />))}
+          </ReviewBox></React.Fragment>)}
+      </ReviewsContainer>
+      <BookBtnReview data-test-id='button-rating'>Оценить книгу</BookBtnReview>
+    </BookPageWrapper>
   )
 };

@@ -67,7 +67,7 @@ export const Navigate = () => {
               Все книги
             </NavigateLink>
           </NavigateCategory>
-          {data.map((item: any) => (
+          {data.map((item: any, index: number) => (
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
@@ -75,6 +75,7 @@ export const Navigate = () => {
               >
                 {item.name}
               </NavigateLink>
+              <NavigateBooksCount>{index}</NavigateBooksCount>
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}

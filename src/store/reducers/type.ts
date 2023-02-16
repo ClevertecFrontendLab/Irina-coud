@@ -26,7 +26,3 @@ export interface IDefaultState {
 export interface IState {
   reducer: IDefaultState;
 };
-
-export interface ILocalState {
-  [key: string]: object;
-};

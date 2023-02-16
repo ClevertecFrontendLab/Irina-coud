@@ -5,6 +5,7 @@ import {
   BookAuthor,
   BookBtn,
   BookBtnContainer,
+  BookCardWrapper,
   BookImage,
   BookImageContainer,
   BooksCard,
@@ -29,8 +30,9 @@ export const BookCard = () => {
   const host = 'https://strapi.cleverland.by';
 
   return (
-    <>
-      {booksInfo && (booksInfo.map((card) => (
+    <React.Fragment>
+      <BookCardWrapper />
+      {booksInfo ? (booksInfo.map((card) => (
         <BooksCard key={card.id} data-test-id='card' to={String(card.id)} className={currentDisplay} onClick={() => dispatch(changeIdCurrentBook(String(card.id)))}>
           <BookImageContainer className={currentDisplay} >
             <BookImage src={card.image ? `${host}${card.image.url}` : `${emptyCat}`}
@@ -45,8 +47,7 @@ export const BookCard = () => {
             <BookBtn className={currentDisplay}>Забронировать</BookBtn>
           </BookBtnContainer>
         </BooksCard>
-      )))}
-    </>
-
+      ))) : ''}
+    </React.Fragment>
   )
 };

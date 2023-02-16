@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+export const BookCardWrapper = styled.div`
+display: none;
+`;
+
 export const BooksCard = styled(Link)`
   display: grid;
   width: 100%;

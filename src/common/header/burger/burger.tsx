@@ -81,7 +81,7 @@ export const Burger = () => {
               Все книги
             </NavigateLink>
           </NavigateCategory>
-          {data.map((item: any) => (
+          {data.map((item: any, index: number) => (
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
@@ -90,7 +90,7 @@ export const Burger = () => {
               >
                 {item.name}
               </NavigateLink>
-              <NavigateBooksCount>{item.count}</NavigateBooksCount>
+              <NavigateBooksCount>{index}</NavigateBooksCount>
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}

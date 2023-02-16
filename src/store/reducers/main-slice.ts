@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { IDefaultState } from './type';
 
 
-
 export const defaultState: IDefaultState = {
   isActiveTail: true,
   isActiveList: false,
