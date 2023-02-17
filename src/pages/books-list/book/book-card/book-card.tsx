@@ -39,12 +39,12 @@ export const BookCard = () => {
               className={currentDisplay} />
           </BookImageContainer>
           <RatingBox className={currentDisplay}>
-            <Rating />
+            <Rating rating={card.rating} />
           </RatingBox>
           <BookTitle className={currentDisplay}>{card.title}</BookTitle>
           <BookAuthor className={currentDisplay}>{card.authors},{card.issueYear}</BookAuthor>
           <BookBtnContainer className={currentDisplay}>
-            <BookBtn className={currentDisplay}>Забронировать</BookBtn>
+            <BookBtn className={currentDisplay} onClick={(event) => event.preventDefault()}>Забронировать</BookBtn>
           </BookBtnContainer>
         </BooksCard>
       ))) : ''}

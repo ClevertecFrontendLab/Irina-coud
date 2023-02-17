@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { loadBooks } from './reducers/main-slice';
+import { loadBooks, loadBooksCategories } from './reducers/main-slice';
 
 export const booksInfoApi = createApi({
   reducerPath: 'booksInfoApi',
-  tagTypes: ['books'],
+  tagTypes: ['books', 'categories'],
   baseQuery: fetchBaseQuery({ baseUrl: 'https://strapi.cleverland.by' }),
   endpoints: (build) => ({
     getBooks: build.query<any, void>({
@@ -26,6 +26,17 @@ export const booksInfoApi = createApi({
     }),
     getCategories: build.query<any, void>({
       query: () => '/api/categories',
+
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(loadBooksCategories(data));
+        } catch (e) {
+          console.error('userApi createUser error', e);
+        }
+      },
+      providesTags: () => ['categories']
     })
   })
 });

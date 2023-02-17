@@ -1,18 +1,33 @@
-import { RatingIcon, RatingItem, RatingWrapper } from './rating.styled';
+import { useLocation, useParams } from 'react-router-dom';
+import { RatingIcon, RatingIsEmpty, RatingItem, RatingWrapper } from './rating.styled';
 
 import { useMakeRating } from './use-make-rating';
 
-export const Rating = () => {
+interface IRating {
+  rating?: number | null | undefined;
+}
 
-  const rating = useMakeRating();
+export const Rating = ({ rating }: IRating) => {
+
+  const ratingStars = useMakeRating();
+
+  const { category, bookId } = useParams();
+
+  const location = useLocation();
+
+  const isBookPageLocation = location.pathname.includes(`books/${category}/${bookId}`);
 
   return (
     <RatingWrapper>
-      {rating.map((item) => (
+      {isBookPageLocation ? ratingStars.map((item, index) => (
         <RatingItem key={item.id}>
-          <RatingIcon xmlns={item.xmlns} fill={item.fill}><path d={item.d} stroke={item.stroke} />
+          <RatingIcon xmlns={item.xmlns} fill={index < rating! ? '#FFBC1F' : item.fill}><path d={item.d} stroke={item.stroke} />
           </RatingIcon>
-        </RatingItem>))}
+        </RatingItem>)) : rating ? ratingStars.map((item, index) => (
+          <RatingItem key={item.id}>
+            <RatingIcon xmlns={item.xmlns} fill={index < rating ? '#FFBC1F' : item.fill}><path d={item.d} stroke={item.stroke} />
+            </RatingIcon>
+          </RatingItem>)) : <RatingIsEmpty>еще нет оценок</RatingIsEmpty>}
     </RatingWrapper>
   )
 };

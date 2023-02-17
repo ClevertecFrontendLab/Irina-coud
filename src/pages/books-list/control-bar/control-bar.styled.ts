@@ -64,6 +64,7 @@ export const ControlBarSearch = styled.input`
   border-radius: 599px;
   background: white;
   padding: 0 0 0 16px;
+    caret-color: #F83600;
         ::placeholder{
         color: #A7A7A7;
       }
@@ -92,6 +93,7 @@ export const ControlBarSort = styled.button`
   background: url(${sort}) 16px center / 16px no-repeat;
   border-radius: 599px;
   padding: 0 0 0 23px;
+  cursor: pointer;
     @media screen and (min-width: 680px) {
       ::after {
         content: 'По рейтингy';

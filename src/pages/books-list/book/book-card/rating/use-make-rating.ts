@@ -66,7 +66,7 @@ export function useMakeRating() {
     fill: 'none'
   };
 
-  const rating: IRatingItem[] = [star1, star2, star3, star4, star5];
+  const rating: IRatingItem[] = [star5, star4, star3, star2, star1];
 
   return rating;
 };

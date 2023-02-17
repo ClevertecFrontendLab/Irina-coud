@@ -11,6 +11,12 @@ export interface IBook {
   title: string
 }
 
+export interface IBooksCategories {
+  name: string,
+  path: string,
+  id: number,
+}
+
 export interface IDefaultState {
   isActiveTail: boolean,
   isActiveList: boolean,
@@ -21,6 +27,7 @@ export interface IDefaultState {
   isOpenReview: boolean,
   idCurrentBook: string,
   booksInfo: IBook[],
+  booksCategories: IBooksCategories[]
 };
 
 export interface IState {

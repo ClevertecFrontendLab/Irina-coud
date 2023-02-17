@@ -74,12 +74,12 @@ export const NavigateList = styled.ul<IMenuItem>`
         background-color: #BFC4C9;
         position: absolute;
         left: 0;
-        top: 915px;
+        top: 711px;
       }
     }
     @media screen and (max-width: 330px) {
       ::after{
-        top: 942px;
+        top: 737px;
       }    
     }
 }
@@ -192,8 +192,8 @@ export const NavigateCategories = styled.ul`
       margin: 0px 0 40px 23px;
       display: flex;
       flex-direction: column;
-      min-height: 632px;
-      justify-content: space-between;
+      height: 100%;
+      row-gap: 16px;
         @media screen and (max-width: 770px) {
           max-width: 279px;
           width: 100%;
@@ -201,7 +201,6 @@ export const NavigateCategories = styled.ul`
         @media screen and (max-width: 330px) {
           margin: 0px 0 38px 23px;
           max-width: 266px;
-          height: 659px;
         }
      }
 `;

@@ -20,6 +20,8 @@ import {
   BookRatingBox,
   BookSubtitle,
   BookTitle,
+  RatingIsEmpty,
+  RatingIsNotEmpty,
   ReviewBox,
   ReviewsContainer
 } from './book-page.styled';
@@ -29,6 +31,7 @@ import { Rating } from '../books-list/book/book-card/rating/rating';
 import { IState } from '../../store/reducers/type';
 
 import { changeOpenReview } from '../../store/reducers/main-slice';
+
 
 
 export interface IBookInfo {
@@ -75,8 +78,8 @@ export const BookPage = ({ data }: { data: IBookInfo }) => {
       </BookInfo>
       <BookSubtitle>Рейтинг</BookSubtitle>
       <BookRatingBox>
-        <Rating />
-        <span>{rating}</span>
+        <Rating rating={rating} />
+        {rating ? <RatingIsNotEmpty>{rating}</RatingIsNotEmpty> : <RatingIsEmpty>еще нет оценок</RatingIsEmpty>}
       </BookRatingBox>
       <BookSubtitle>Подробная информация</BookSubtitle>
       <BookDetailInfoContainer>

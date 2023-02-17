@@ -24,7 +24,6 @@ export const StyledSwiperSlide = styled(SwiperSlide)`
   }
   @media screen and (max-width: 780px) {
     display: flex;
-    justify-content: center;
   }
 `;
 
@@ -48,6 +47,7 @@ export const ImageSlider = styled.img`
     }
     @media screen and (max-width: 770px) {
       max-width: 136px;
+     height:198px;
     }
     @media screen and (max-width: 650px) {
       max-width: 188px;

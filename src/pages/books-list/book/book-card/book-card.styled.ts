@@ -14,7 +14,6 @@ export const BooksCard = styled(Link)`
   &.tail{
     max-width: 190px;
     height: 470px;
-    row-gap: 16px;
     padding: 0 8px 16px 8px;
       @media screen and (max-width: 770px) {
         grid-template-rows: 5fr 1fr 1fr 1fr;
@@ -34,12 +33,12 @@ export const BooksCard = styled(Link)`
      max-width: 825px;
      height: 218px;
      grid-template-areas: 
-     ". image title ."
+     ". image title title"
      ". image author ."
      ". image rating button";
      grid-template-columns: 3% 16% 57%;
      grid-template-rows: 39% 35% 0% 0%;
-     padding: 24px 0;
+     padding: 24px 5px 24px 0;
       @media screen and (max-width: 770px) {
         max-width: 640px;
         height: 240px;
@@ -104,6 +103,9 @@ export const BookImage = styled.img`
 export const RatingBox = styled.div`
   &.tail{
     padding: 0 0 0 8px;
+      @media screen and (max-width: 770px) {
+       margin: 5px 0 0 0;
+      }
   }
   &.list{
     grid-area: rating;
@@ -118,8 +120,9 @@ export const BookTitle = styled.p`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+        max-height: 54px;
       @media screen and (max-width: 770px) {
         font-weight: 700;
         font-size: 12px;
@@ -129,6 +132,7 @@ export const BookTitle = styled.p`
         font-weight: 600;
         font-size: 14px;
         line-height: 18px;
+        min-height: 54px;
       }
    }
   &.list{
@@ -139,7 +143,7 @@ export const BookTitle = styled.p`
         overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
       @media screen and (max-width: 770px) {
         font-size: 24px;
@@ -162,6 +166,7 @@ export const BookAuthor = styled.p`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+        margin: 10px 0 0 0;
       @media screen and (max-width: 770px) {
         font-weight: 700;
         font-size: 12px;
@@ -193,6 +198,7 @@ export const BookBtnContainer = styled.div`
   display: flex;
   &.tail{
     justify-content: flex-end;
+         align-items: end;
       @media screen and (max-width: 770px) {
         justify-content: center;
       }

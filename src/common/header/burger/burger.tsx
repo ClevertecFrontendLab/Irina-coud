@@ -50,6 +50,7 @@ export const Burger = () => {
     const payload = event.currentTarget.dataset.info;
     dispatch(changeMenu(payload));
     event.currentTarget.classList.add('active');
+    dispatch(changeOpenCategory(!isOpenCategory))
     if (!isSelectedBook && isOpenCategory) {
       dispatch(changeOpenCategory(!isOpenCategory));
     }
@@ -65,7 +66,6 @@ export const Burger = () => {
           <NavigateBookLink
             to='books/all'
             background={isSelectedBook ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : '#363636'}
-            onClick={() => dispatch(changeOpenCategory(!isOpenCategory))}
             data-test-id='burger-showcase'
           >
             Витрина книг

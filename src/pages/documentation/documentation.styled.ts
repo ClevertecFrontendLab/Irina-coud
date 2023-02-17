@@ -7,10 +7,10 @@ export const DocumentationWrapper = styled.div`
   flex-direction: column;
   gap: 32px;
     @media screen and (max-width: 870px) {
-      max-width: 640px;
+      padding: 0 64px;
     }
     @media screen and (max-width: 330px) {
-      max-width: 288px;
+         padding: 0 16px;
     }
 `;
 

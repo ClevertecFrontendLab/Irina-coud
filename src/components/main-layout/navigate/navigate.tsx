@@ -34,6 +34,7 @@ export const Navigate = () => {
     const payload = event.currentTarget.dataset.info;
     dispatch(changeMenu(payload));
     event.currentTarget.classList.add('active');
+    dispatch(changeOpenCategory(!isOpenCategory))
     if (!isSelectedBook && isOpenCategory) {
       dispatch(changeOpenCategory(!isOpenCategory));
     }
@@ -47,11 +48,10 @@ export const Navigate = () => {
       <NavigateList
         background={isSelectedBook ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : '#363636'}
       >
-        <NavigateItem onClick={(event) => handlerClick(event)} data-info='books'>
+        <NavigateItem onClick={(event) => handlerClick(event)} data-info='books' >
           <NavigateBookLink
             to='books/all'
             background={isSelectedBook ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : '#363636'}
-            onClick={() => dispatch(changeOpenCategory(!isOpenCategory))}
             data-test-id='navigation-showcase'
           >
             Витрина книг

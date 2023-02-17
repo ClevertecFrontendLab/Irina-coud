@@ -48,9 +48,9 @@ export const BookInfo = styled.div`
         "subtitle subtitle"
         "description description";
       row-gap: 10px;
-      grid-template-columns: 43% 57%;
-        grid-template-rows: 11% 14% 19% 10% 50%;
-      margin: 46px auto 35px auto;
+     grid-template-columns: 22% 75%;
+    grid-template-rows: 29% 14% 15% 8% 22%;
+    margin: 46px auto 105px auto;
     }
     @media screen and (max-width: 650px) {
       display: flex;
@@ -73,8 +73,6 @@ export const BookInfo = styled.div`
 
 export const BookImageBox = styled.div`
   grid-area: image;
-  /* display: flex; */
-  /* justify-content: center; */
     @media screen and (max-width: 325px) {
       max-width: 288px;
       width: 100%;
@@ -235,21 +233,26 @@ export const BookDescriptionText = styled.p`
 export const BookRatingBox = styled.div`
   display: flex;
   align-items: center;
-  max-width: 221px;
-  width: 100%;
-  justify-content: space-between;
   margin: 0 0 57px 0;
-    span{
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 28px;
-    }
     @media screen and (max-width: 770px) {
       margin: 0 0 50px 0;
     }
     @media screen and (max-width: 330px) {
       margin: 0 0 20px 0;
     }
+`;
+
+export const RatingIs = styled.span`
+  margin: 0 0 0 24px;
+`;
+
+export const RatingIsNotEmpty = styled(RatingIs)`
+   font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+`;
+
+export const RatingIsEmpty = styled(RatingIs)`
 `;
 
 export const BookDetailInfoContainer = styled.div`
@@ -386,4 +389,5 @@ export const AccordionButton = styled.button`
       transform: rotate(-45deg);
     }
   }
-`
+`;
+

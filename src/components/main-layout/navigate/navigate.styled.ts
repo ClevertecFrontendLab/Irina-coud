@@ -134,8 +134,8 @@ export const NavigateCategories = styled.ul`
       margin: 0px 0 40px 23px;
       display: flex;
       flex-direction: column;
-      min-height: 632px;
-      justify-content: space-between;
+     height: 100%;
+     row-gap: 16px;
     }
 `;
 
