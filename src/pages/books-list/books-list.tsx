@@ -1,5 +1,5 @@
-import { ControlBar } from './control-bar/control-bar';
-import { BooksContainer } from './book/books-container';
+import { ControlBar } from '../../components/control-bar/control-bar';
+import { BooksContainer } from './books-container/books-container';
 
 import { ContentWrapper } from './books-list.styled';
 
@@ -9,4 +9,3 @@ export const BooksList = () => (
     <BooksContainer />
   </ContentWrapper>
 );
-
