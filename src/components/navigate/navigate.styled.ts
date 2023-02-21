@@ -108,18 +108,13 @@ export const NavigateCategories = styled.ul`
 `;
 
 export const NavigateCategory = styled.li`
+/* display: flex; */
   font-size: 16px;
   line-height: 24px;
   cursor: pointer;
     :hover{
       color: #FF5253;
     }
-`;
-
-export const NavigateBooksCount = styled.span`
-  line-height: 24px;
-  color: #A7A7A7;
-  margin: 0 0 0 5px;
 `;
 
 export const NavigateProfile = styled.ul`

@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
+import { CountNavigate } from '../count-navigate/count-navigate';
+
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 import { changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IState } from '../../store/reducers/type';
-import { useFilters } from '../../utils/use-filters';
 
 import {
   AccordionButton,
-  NavigateBooksCount,
   NavigateCategories,
   NavigateCategory,
   NavigateContainer,
@@ -31,7 +31,7 @@ export const Navigate = () => {
 
   const isSelectedCategory = location.pathname.includes(`books/${category}`);
 
-  const { isOpenCategory, booksCategories, booksInfo } = useSelector((state: IState) => state.reducer);
+  const { isOpenCategory, booksCategories } = useSelector((state: IState) => state.reducer);
 
   function handlerClick(event: { currentTarget: any }) {
     const payload = event.currentTarget.dataset.info;
@@ -45,8 +45,6 @@ export const Navigate = () => {
 
   const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
   const { isSuccess: isSuccessBooks } = useGetBooksQuery();
-
-  // const countBooks = useFilters(booksInfo).length;
 
   return (
     <NavigateContainer>
@@ -80,7 +78,7 @@ export const Navigate = () => {
               >
                 {item.name}
               </NavigateLink>
-              <NavigateBooksCount>{booksInfo.filter((book) => book.categories.includes('Бизнес')).length}</NavigateBooksCount>
+              <CountNavigate {...item} />
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}

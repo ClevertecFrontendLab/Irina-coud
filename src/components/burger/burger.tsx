@@ -3,6 +3,8 @@ import { RefObject, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
+import { CountNavigate } from '../count-navigate/count-navigate';
+
 import { useOnClickOutside } from '../../utils/click-outside';
 
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
@@ -11,7 +13,6 @@ import { IState } from '../../store/reducers/type';
 
 import {
   AccordionButton,
-  NavigateBooksCount,
   NavigateCategories,
   NavigateCategory,
   NavigateContainer,
@@ -102,7 +103,7 @@ export const Burger = () => {
               >
                 {item.name}
               </NavigateLink>
-              <NavigateBooksCount>{index}</NavigateBooksCount>
+              <CountNavigate {...item} />
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}
