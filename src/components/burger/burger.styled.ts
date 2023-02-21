@@ -2,10 +2,6 @@ import styled from 'styled-components';
 
 import { NavLink } from 'react-router-dom';
 
-interface IMenuItem {
-  background: string
-}
-
 export const NavigateContainer = styled.nav`
   position: absolute;
   left: -100%;  
@@ -39,7 +35,7 @@ export const NavigateContainer = styled.nav`
      }
 `;
 
-export const NavigateList = styled.ul<IMenuItem>`
+export const NavigateList = styled.ul`
   width: 100%;
   >li:first-child{
     margin: 0 0 40px 0;
@@ -83,22 +79,6 @@ export const NavigateList = styled.ul<IMenuItem>`
       }    
     }
 }
-  &.active{
-    >li::after{
-      content: " ";
-      display: block;
-      height: 2px;
-      max-width: 255px;
-      width: 100%;
-      background: ${({ background }) => background};
-      position: relative;
-      top: 8px;
-      left: 0;
-    }
-    >li:first-child{
-      margin: 0 0 19px 0;
-    }
-  }
   @media screen and (max-width: 770px) {
      max-width: 260px;
   }
@@ -177,12 +157,6 @@ export const NavigateLinkItem = styled(NavigateLink)`
       left: 0; 
     }
   }
-`;
-
-export const NavigateBookLink = styled(NavigateLinkItem) <IMenuItem>`
-  background: ${({ background }) => background};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 `;
 
 export const NavigateCategories = styled.ul`

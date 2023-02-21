@@ -2,10 +2,6 @@ import styled from 'styled-components';
 
 import { NavLink } from 'react-router-dom';
 
-interface IMenuItem {
-  background: string
-}
-
 export const NavigateContainer = styled.nav`
   @media screen and (max-width: 1180px) {
     padding: 0 15px;
@@ -15,31 +11,15 @@ export const NavigateContainer = styled.nav`
   }
 `;
 
-export const NavigateList = styled.ul<IMenuItem>`
+export const NavigateList = styled.ul`
   >li:first-child{
-    margin: 0 0 40px 0;
+    margin: 0 0 20px 0;
   }
   >li:last-child{
     margin: 44px 0 0px 0;
   }
   :hover>li:first-child::after{
     background: #FF5253;
-  }
-  &.active{
-    >li::after{
-      content: " ";
-      display: block;
-      height: 2px;
-      max-width: 255px;
-      width: 100%;
-      background: ${({ background }) => background};
-      position: relative;
-      top: 8px;
-      left: 0;
-    }
-    >li:first-child{
-      margin: 0 0 19px 0;
-    }
   }
 `;
 
@@ -101,12 +81,6 @@ export const NavigateLink = styled(NavLink)`
 
 export const NavigateLinkItem = styled(NavigateLink)`
   &.active{
-    background: linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 28px;
       ::after{
         content: " ";
         display: block;
@@ -119,12 +93,6 @@ export const NavigateLinkItem = styled(NavigateLink)`
         left: 0; 
       }
     }
-`;
-
-export const NavigateBookLink = styled(NavigateLinkItem) <IMenuItem>`
-  background: ${({ background }) => background};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 `;
 
 export const NavigateCategories = styled.ul`

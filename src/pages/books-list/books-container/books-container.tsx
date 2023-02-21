@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { BookCard } from '../../../components/book-card/book-card';
+import { BookCard } from './book-card/book-card';
 
 import { IState } from '../../../store/reducers/type';
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../../store/books-info-api';

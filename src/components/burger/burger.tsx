@@ -1,17 +1,16 @@
 import { RefObject, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { useOnClickOutside } from '../../utils/click-outside';
 
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
-import { changeBurgerMenu, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
+import { changeBurgerMenu, changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IState } from '../../store/reducers/type';
 
 import {
   AccordionButton,
-  NavigateBookLink,
   NavigateBooksCount,
   NavigateCategories,
   NavigateCategory,
@@ -26,9 +25,14 @@ import {
 export const Burger = () => {
 
   const dispatch = useDispatch();
+
   const location = useLocation();
 
+  const { category } = useParams();
+
   const isSelectedBook = location.pathname.includes('books');
+
+  const isSelectedCategory = location.pathname.includes(`books/${category}`);
 
   const { isBurgerMenuOpen, isOpenCategory } = useSelector((state: IState) => state.reducer);
 
@@ -64,17 +68,16 @@ export const Burger = () => {
   return (
     <NavigateContainer className={isBurgerMenuOpen ? 'active' : ''} ref={nav} data-test-id='burger-navigation'>
       <NavigateList
-        background={isSelectedBook ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : '#363636'}
         className={isOpenCategory ? 'open' : ''}
       >
         <NavigateItem onClick={(event) => handlerClick(event)} data-info='books'>
-          <NavigateBookLink
+          <NavigateLinkItem
             to='books/all'
-            background={isSelectedBook ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : '#363636'}
+            className={isSelectedCategory ? 'active' : ''}
             data-test-id='burger-showcase'
           >
             Витрина книг
-          </NavigateBookLink>
+          </NavigateLinkItem>
           <AccordionButton className={!isSelectedBook || !isSuccessCategories || !isSuccessBooks ? 'hidden' : isOpenCategory ? 'open' : ''} />
         </NavigateItem>
         {isSuccessCategories && isSuccessBooks ? (<NavigateCategories className={!isSelectedBook ? '' : isOpenCategory ? 'active' : ''}>
@@ -82,6 +85,7 @@ export const Burger = () => {
             <NavigateLink
               to='books/all'
               data-test-id='burger-books'
+              onClick={() => dispatch(changeCurrentCategory('Все книги'))}
             >
               Все книги
             </NavigateLink>
@@ -90,7 +94,10 @@ export const Burger = () => {
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
-                onClick={() => dispatch(changeBurgerMenu(!isBurgerMenuOpen))}
+                onClick={() => {
+                  dispatch(changeBurgerMenu(!isBurgerMenuOpen));
+                  dispatch(changeCurrentCategory(item.name))
+                }}
                 data-test-id='burger-books'
               >
                 {item.name}

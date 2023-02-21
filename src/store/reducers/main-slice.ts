@@ -13,7 +13,8 @@ export const defaultState: IDefaultState = {
   isOpenReview: true,
   idCurrentBook: '',
   booksInfo: [],
-  booksCategories: []
+  booksCategories: [],
+  currentCategory: 'Все книги'
 };
 
 export const mainSlice = createSlice({
@@ -65,6 +66,12 @@ export const mainSlice = createSlice({
       const state = currentState;
 
       state.booksCategories = payload;
+    },
+    changeCurrentCategory: (currentState: IDefaultState, { payload }: { payload: string }) => {
+      const state = currentState;
+
+      state.currentCategory = payload;
+
     }
   }
 });
@@ -80,5 +87,6 @@ export const {
   changeOpenReview,
   changeIdCurrentBook,
   loadBooks,
-  loadBooksCategories
+  loadBooksCategories,
+  changeCurrentCategory
 } = actions;
