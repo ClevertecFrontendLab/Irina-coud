@@ -68,7 +68,7 @@ export const BookPage = ({ data }: { data: IBookInfo }) => {
         <BookImageBox>
           <Slider images={images} />
         </BookImageBox>
-        <BookTitle>{title}</BookTitle>
+        <BookTitle data-test-id='book-title'>{title}</BookTitle>
         <BookAuthor>{authors}</BookAuthor>
         <BookBtnBooking>Забронировать</BookBtnBooking>
         <BookSubtitle>О книге</BookSubtitle>

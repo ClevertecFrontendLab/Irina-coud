@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { CountNavigate } from '../count-navigate/count-navigate';
+import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 import { changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
@@ -73,7 +73,7 @@ export const Navigate = () => {
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
-                data-test-id='navigation-books'
+                data-test-id={`navigation-${item.path}`}
                 onClick={() => dispatch(changeCurrentCategory(item.name))}
               >
                 {item.name}

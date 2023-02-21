@@ -3,7 +3,7 @@ import { RefObject, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { CountNavigate } from '../count-navigate/count-navigate';
+import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useOnClickOutside } from '../../utils/click-outside';
 
@@ -91,7 +91,7 @@ export const Burger = () => {
               Все книги
             </NavigateLink>
           </NavigateCategory>
-          {data.map((item: any, index: number) => (
+          {data.map((item: any) => (
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
@@ -99,7 +99,7 @@ export const Burger = () => {
                   dispatch(changeBurgerMenu(!isBurgerMenuOpen));
                   dispatch(changeCurrentCategory(item.name))
                 }}
-                data-test-id='burger-books'
+                data-test-id={`burger-${item.path}`}
               >
                 {item.name}
               </NavigateLink>

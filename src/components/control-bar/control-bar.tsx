@@ -42,7 +42,7 @@ export const ControlBar = () => {
         <ButtonSearch onClick={() => dispatch(changeActiveSearch(!isSearchActive))} data-test-id='button-search-open' />
         <ControlBarSearch type="text" placeholder="Поиск книги или автора..." autoComplete="off" className={isSearchActive ? 'active' : ''} data-test-id='input-search' />
         <StyleCloseIcon className={isSearchActive ? 'active' : ''} onClick={() => dispatch(changeActiveSearch(!isSearchActive))} data-test-id='button-search-close' />
-        <ControlBarSort className={isSortActive ? '' : 'change'} onClick={() => dispatch(changeActiveSort(!isSortActive))} />
+        <ControlBarSort className={isSortActive ? '' : 'change'} onClick={() => dispatch(changeActiveSort(!isSortActive))} data-test-id='sort-rating-button' />
       </ControlBarFilters>
         <ControlBarDisplay>
           <ControlButtonDisplay data-test-id='button-menu-view-window' onClick={(e) => handlerClick(e)} id='tail' background={isActiveTail ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : 'white'}><StyleTailIcon color={isActiveTail ? 'white' : '#A7A7A7'} /></ControlButtonDisplay>
