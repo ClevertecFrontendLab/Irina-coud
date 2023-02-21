@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import search from '../../assets/icon/search.svg';
 import sort from '../../assets/icon/sort.svg';
+import sortRevers from '../../assets/icon/sort-revers.svg';
 
 import { ReactComponent as TailIcon } from '../../assets/icon/tile.svg';
 import { ReactComponent as ListIcon } from '../../assets/icon/list.svg';
@@ -94,6 +95,9 @@ export const ControlBarSort = styled.button`
   border-radius: 599px;
   padding: 0 0 0 23px;
   cursor: pointer;
+  &.change{
+  background: url(${sortRevers}) 16px center / 16px no-repeat;
+  }
     @media screen and (min-width: 680px) {
       ::after {
         content: 'По рейтингy';

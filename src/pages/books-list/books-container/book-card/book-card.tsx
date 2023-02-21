@@ -35,6 +35,8 @@ export const BookCard = () => {
 
   const filteredBooks = useFilters(booksInfo);
 
+  // console.log(filteredBooks.sort((a, b) => a.rating as number - (b.rating as number)))
+
   return (
     <React.Fragment>
       <BookCardWrapper />

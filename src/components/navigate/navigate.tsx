@@ -46,7 +46,7 @@ export const Navigate = () => {
   const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
   const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
-  const countBooks = useFilters(booksInfo).length;
+  // const countBooks = useFilters(booksInfo).length;
 
   return (
     <NavigateContainer>
@@ -61,11 +61,6 @@ export const Navigate = () => {
           </NavigateLinkItem>
           <AccordionButton className={!isSelectedBook || !isSuccessCategories || !isSuccessBooks ? 'hidden' : isOpenCategory ? 'open' : ''} />
         </NavigateItem>
-
-
-
-
-
         {isSuccessCategories && isSuccessBooks ? (<NavigateCategories className={!isSelectedBook ? '' : isOpenCategory ? 'active' : ''}>
           <NavigateCategory>
             <NavigateLink
@@ -89,11 +84,6 @@ export const Navigate = () => {
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}
-
-
-
-
-
         <NavigateItem onClick={(event) => handlerClick(event)} data-info='rules'>
           <NavigateLinkItem to='rules' data-test-id='navigation-terms'>
             Правила пользования

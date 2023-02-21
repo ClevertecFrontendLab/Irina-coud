@@ -14,7 +14,8 @@ export const defaultState: IDefaultState = {
   idCurrentBook: '',
   booksInfo: [],
   booksCategories: [],
-  currentCategory: 'Все книги'
+  currentCategory: 'Все книги',
+  isSortActive: true
 };
 
 export const mainSlice = createSlice({
@@ -72,7 +73,14 @@ export const mainSlice = createSlice({
 
       state.currentCategory = payload;
 
-    }
+    },
+    changeActiveSort: (currentState: IDefaultState, { payload }: { payload: boolean }) => {
+      const state = currentState;
+
+      state.isSortActive = !state.isSortActive;
+
+    },
+
   }
 });
 
@@ -88,5 +96,6 @@ export const {
   changeIdCurrentBook,
   loadBooks,
   loadBooksCategories,
-  changeCurrentCategory
+  changeCurrentCategory,
+  changeActiveSort
 } = actions;
