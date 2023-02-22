@@ -2,6 +2,6 @@ import { EmptyFilteredBooksMessage, EmptyFilteredBooksWrapper } from "./empty-bo
 
 export const EmptyFilteredBooks = () => (
   <EmptyFilteredBooksWrapper>
-    <EmptyFilteredBooksMessage>В этой категории книг ещё нет</EmptyFilteredBooksMessage>
+    <EmptyFilteredBooksMessage data-test-id='empty-category'>В этой категории книг ещё нет</EmptyFilteredBooksMessage>
   </EmptyFilteredBooksWrapper>
 );

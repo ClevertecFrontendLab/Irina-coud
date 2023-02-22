@@ -25,12 +25,13 @@ import {
 } from './book-card.styled';
 import { EmptyFilteredBooks } from '../../../../components/empty-books/empty-books';
 import { useFilters } from '../../../../utils/use-filters';
+import { EmptySearch } from '../../../../components/empty-search/empty-search';
 
 export const BookCard = () => {
 
   const dispatch = useDispatch();
 
-  const { isActiveTail, booksInfo } = useSelector((state: IState) => state.reducer);
+  const { isActiveTail, booksInfo, searchValue } = useSelector((state: IState) => state.reducer);
 
   const currentDisplay = isActiveTail ? 'tail' : 'list';
 
@@ -54,7 +55,7 @@ export const BookCard = () => {
             <BookBtn className={currentDisplay} onClick={(event) => event.preventDefault()}>Забронировать</BookBtn>
           </BookBtnContainer>
         </BooksCard>
-      ))) : <EmptyFilteredBooks />}
+      ))) : filteredBooks.length === 0 && searchValue !== '' ? <EmptySearch /> : <EmptyFilteredBooks />}
     </React.Fragment>
   )
 };
