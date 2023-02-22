@@ -1,9 +1,10 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
 
-import { IState } from "../../../../../store/reducers/type";
+import { useSelector } from 'react-redux';
 
-import { HighlightText } from "./highlight.styled";
+import { IState } from '../../../../../store/reducers/type';
+
+import { HighlightText, Title } from './highlight.styled';
 
 export interface IHighlight {
   title: string
@@ -15,23 +16,26 @@ export const Highlight = (props: IHighlight) => {
 
   const { searchValue } = useSelector((state: IState) => state.reducer);
 
-  if (!searchValue) return <>{title}</>;
+  if (!searchValue) return <Title>{title}</Title>;
   const regexp = new RegExp(searchValue, 'ig');
   const matchValue = title.match(regexp);
 
   if (matchValue) {
-    return <>
+    return <React.Fragment>
       {
         title.split(regexp).map((item, index, array) => {
           if (index < array.length - 1) {
             const itemValue = matchValue.shift()
-            return <>{item}<HighlightText>{itemValue}</HighlightText></>
+
+            return <React.Fragment>{item}<HighlightText data-test-id='highlight-matches'>{itemValue}</HighlightText></React.Fragment>
           }
-          return <>{item}</>;
+
+          return <Title>{item}</Title>;
         })
       }
 
-    </>
+    </React.Fragment>
   }
-  return <>{title}</>;
+
+  return <Title>{title}</Title>;
 };

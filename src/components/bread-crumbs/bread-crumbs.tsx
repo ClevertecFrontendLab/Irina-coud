@@ -24,7 +24,7 @@ export const BreadCrumbs = ({ title, categories }: { title: string, categories: 
 
   return (
     <BreadCrumbsContainer>
-      <BreadCrumbsItem to='/' data-test-id='breadcrumbs-link'>{categories ? categories : categoryName}</BreadCrumbsItem>
+      <BreadCrumbsItem to={`/books/${category}`} data-test-id='breadcrumbs-link'>{categories ? categories : categoryName}</BreadCrumbsItem>
       <p>/</p>
       <p data-test-id='book-name'>{title}</p>
     </BreadCrumbsContainer>
