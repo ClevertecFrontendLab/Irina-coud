@@ -5,9 +5,10 @@ import { IState } from '../../store/reducers/type';
 
 import { BreadCrumbsContainer, BreadCrumbsItem } from './bread-crumbs.styled';
 
-export const BreadCrumbs = ({ title, categories }: { title: string, categories: [string] }) => {
+export const BreadCrumbs = ({ title }: { title: string }) => {
 
   const { category } = useParams();
+
 
   const { booksCategories } = useSelector((state: IState) => state.reducer);
 
@@ -24,7 +25,7 @@ export const BreadCrumbs = ({ title, categories }: { title: string, categories: 
 
   return (
     <BreadCrumbsContainer>
-      <BreadCrumbsItem to={`/books/${category}`} data-test-id='breadcrumbs-link'>{categories ? categories : categoryName}</BreadCrumbsItem>
+      <BreadCrumbsItem to={`/books/${category}`} data-test-id='breadcrumbs-link'>{categoryName}</BreadCrumbsItem>
       <p>/</p>
       <p data-test-id='book-name'>{title}</p>
     </BreadCrumbsContainer>

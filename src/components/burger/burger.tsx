@@ -86,7 +86,10 @@ export const Burger = () => {
             <NavigateLink
               to='books/all'
               data-test-id='burger-books'
-              onClick={() => dispatch(changeCurrentCategory('Все книги'))}
+              onClick={() => {
+                dispatch(changeBurgerMenu(!isBurgerMenuOpen));
+                dispatch(changeCurrentCategory('Все книги'))
+              }}
             >
               Все книги
             </NavigateLink>

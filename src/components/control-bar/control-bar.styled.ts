@@ -55,9 +55,7 @@ export const ControlBarSearch = styled.input`
       height: 0;
       overflow: hidden;
         padding: 0;
-      ::placeholder{
-        color: transparent;
-      }
+
     }
     @media screen and (max-width: 330px) {
     &.active{
@@ -90,7 +88,7 @@ display: none;
       border-radius: 50%;
    }
     
-`
+`;
 
 export const ControlBarSort = styled.button`
   max-width: 150px;
@@ -103,11 +101,11 @@ export const ControlBarSort = styled.button`
   &.change{
   background: url(${sortRevers}) 16px center / 16px no-repeat;
   }
-    @media screen and (min-width: 680px) {
-      ::after {
-        content: 'По рейтингy';
-        display: inline-block;
-      }
+    @media screen and (max-width: 681px) {
+  >span{
+    display: none
+  }
+
      }
     @media screen and (max-width: 680px) {
       width: 32px;

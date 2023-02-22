@@ -17,7 +17,7 @@ export const BookPageContainer = () => {
 
   return (
     <BookPageContainerWrapper>
-      <BreadCrumbs title={data.title} categories={data.categories} />
+      <BreadCrumbs title={data.title} />
       {isLoading ? <Loader /> : error ? <ErrorPopup /> : <BookPage data={data} />}
     </BookPageContainerWrapper>
   )

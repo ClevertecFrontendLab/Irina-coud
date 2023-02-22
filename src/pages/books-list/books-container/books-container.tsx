@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
+
 import { useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { BookCard } from './book-card/book-card';
 
@@ -12,7 +15,17 @@ export const BooksContainer = () => {
   const { isActiveTail } = useSelector((state: IState) => state.reducer);
 
   const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
-  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
+  const { isSuccess: isSuccessBooks, refetch } = useGetBooksQuery();
+
+  const { category, bookId } = useParams();
+
+  const location = useLocation();
+
+  const refetchLocation = location.pathname.includes(`books/${category}/${bookId}`)
+
+  useEffect(() => {
+    refetch()
+  }, [refetchLocation, refetch]);
 
   return (
     <BooksWrapper className={isActiveTail ? 'tail' : 'list'} >
