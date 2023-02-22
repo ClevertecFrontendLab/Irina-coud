@@ -8,6 +8,7 @@ text-align: center;
 width: 100%;
   @media screen and (max-width: 330px) {
    max-width: 250px;
+   margin: 0 auto;
   }
 `;
 

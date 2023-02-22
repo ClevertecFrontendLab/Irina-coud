@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IState } from '../../store/reducers/type';
-import { changeActiveSearch, changeActiveSort, changeDisplay } from '../../store/reducers/main-slice';
+import { changeActiveSearch, changeActiveSort, changeDisplay, changeSearchValue } from '../../store/reducers/main-slice';
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 
 import {
@@ -40,7 +40,15 @@ export const ControlBar = () => {
     <ControlBarWrapper>
       {isSuccessCategories && isSuccessBooks ? (<React.Fragment>  <ControlBarFilters>
         <ButtonSearch onClick={() => dispatch(changeActiveSearch(!isSearchActive))} data-test-id='button-search-open' />
-        <ControlBarSearch type="text" placeholder="Поиск книги или автора..." autoComplete="off" className={isSearchActive ? 'active' : ''} data-test-id='input-search' />
+        <ControlBarSearch
+          type="text"
+          placeholder="Поиск книги или автора..."
+          autoComplete="off"
+          className={isSearchActive ? 'active' : ''}
+          data-test-id='input-search'
+          onChange={(event) =>
+            dispatch(changeSearchValue(String(event.currentTarget.value)))
+          } />
         <StyleCloseIcon className={isSearchActive ? 'active' : ''} onClick={() => dispatch(changeActiveSearch(!isSearchActive))} data-test-id='button-search-close' />
         <ControlBarSort className={isSortActive ? '' : 'change'} onClick={() => dispatch(changeActiveSort(!isSortActive))} data-test-id='sort-rating-button' />
       </ControlBarFilters>

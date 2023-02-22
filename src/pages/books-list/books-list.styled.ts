@@ -15,5 +15,6 @@ export const ContentWrapper = styled.div`
     }
     @media screen and (max-width: 330px) {
       max-width: 288px;
+      min-height: 483px;
     }
 `;

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import search from '../../assets/icon/search.svg';
+import activeSearch from '../../assets/icon/active-search.svg';
 import sort from '../../assets/icon/sort.svg';
 import sortRevers from '../../assets/icon/sort-revers.svg';
 
@@ -41,7 +42,11 @@ export const ControlBarSearch = styled.input`
   border-radius: 599px;
   background: url(${search}) 16px center / 16px no-repeat;
   padding: 0 0 0 40px;
-      height: 38px;
+  height: 38px;
+  :focus{
+      caret-color: #F83600;
+        background: url(${activeSearch}) 16px center / 16px no-repeat;
+  }
     @media screen and (max-width: 780px) {
       max-width: 274px;
     }
@@ -55,7 +60,7 @@ export const ControlBarSearch = styled.input`
       }
     }
     @media screen and (max-width: 330px) {
-    &.active{    
+    &.active{
   position: absolute;
     z-index: 500;
         max-width: 288px;
@@ -65,12 +70,12 @@ export const ControlBarSearch = styled.input`
   border-radius: 599px;
   background: white;
   padding: 0 0 0 16px;
-    caret-color: #F83600;
+    /* caret-color: #F83600; */
         ::placeholder{
         color: #A7A7A7;
       }
     }
-    
+
     }
 `;
 

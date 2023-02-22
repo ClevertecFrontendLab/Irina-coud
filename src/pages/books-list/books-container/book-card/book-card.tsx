@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Rating } from '../../../../components/rating/rating';
+import { Highlight } from './highlight/highlight';
 
 import { IState } from '../../../../store/reducers/type';
 import { changeIdCurrentBook } from '../../../../store/reducers/main-slice';
@@ -35,8 +36,6 @@ export const BookCard = () => {
 
   const filteredBooks = useFilters(booksInfo);
 
-  // console.log(filteredBooks.sort((a, b) => a.rating as number - (b.rating as number)))
-
   return (
     <React.Fragment>
       <BookCardWrapper />
@@ -49,7 +48,7 @@ export const BookCard = () => {
           <RatingBox className={currentDisplay}>
             <Rating rating={card.rating} />
           </RatingBox>
-          <BookTitle className={currentDisplay}>{card.title}</BookTitle>
+          <BookTitle className={currentDisplay}><Highlight title={card.title} /></BookTitle>
           <BookAuthor className={currentDisplay}>{card.authors},{card.issueYear}</BookAuthor>
           <BookBtnContainer className={currentDisplay}>
             <BookBtn className={currentDisplay} onClick={(event) => event.preventDefault()}>Забронировать</BookBtn>

@@ -29,7 +29,8 @@ export interface IDefaultState {
   booksInfo: IBook[],
   booksCategories: IBooksCategories[],
   currentCategory: string,
-  isSortActive: boolean
+  isSortActive: boolean,
+  searchValue: string
 };
 
 export interface IState {
