@@ -66,9 +66,9 @@ export const Burger = () => {
     }
   };
 
-  function handlerClickCategory(event: React.ChangeEvent) {
+  function handlerClickCategory(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     dispatch(changeBurgerMenu(!isBurgerMenuOpen));
-    dispatch(changeCurrentCategory(event.target.innerHTML));
+    dispatch(changeCurrentCategory(String(event.currentTarget.innerHTML)));
   };
 
   return (
@@ -95,7 +95,7 @@ export const Burger = () => {
             <NavigateLink
               to='books/all'
               data-test-id='burger-books'
-              onClick={() => handlerClickCategory}
+              onClick={(event) => handlerClickCategory(event)}
             >
               Все книги
             </NavigateLink>
@@ -104,7 +104,7 @@ export const Burger = () => {
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
-                onClick={() => handlerClickCategory}
+                onClick={(event) => handlerClickCategory(event)}
                 data-test-id={`burger-${item.path}`}
               >
                 {item.name}

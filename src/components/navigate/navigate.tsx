@@ -47,8 +47,8 @@ export const Navigate = () => {
   const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
   const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
-  function handlerClickCategory(event: React.ChangeEvent) {
-    dispatch(changeCurrentCategory(event.target.innerHTML));
+  function handlerClickCategory(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    dispatch(changeCurrentCategory(String(event.currentTarget.innerHTML)));
   };
 
   return (
@@ -71,7 +71,7 @@ export const Navigate = () => {
             <NavigateLink
               to='books/all'
               data-test-id='navigation-books'
-              onClick={() => handlerClickCategory}
+              onClick={(event) => handlerClickCategory(event)}
             >
               Все книги
             </NavigateLink>
@@ -81,7 +81,7 @@ export const Navigate = () => {
               <NavigateLink
                 to={`books/${item.path}`}
                 data-test-id={`navigation-${item.path}`}
-                onClick={() => handlerClickCategory}
+                onClick={(event) => handlerClickCategory(event)}
               >
                 {item.name}
               </NavigateLink>
