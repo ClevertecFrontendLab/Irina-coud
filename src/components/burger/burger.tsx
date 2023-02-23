@@ -1,4 +1,4 @@
-import { RefObject, useRef } from 'react';
+import { AnchorHTMLAttributes, RefObject, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
@@ -66,12 +66,21 @@ export const Burger = () => {
     }
   };
 
+  function handlerClickCategory(event: { target: any }) {
+    dispatch(changeBurgerMenu(!isBurgerMenuOpen));
+    dispatch(changeCurrentCategory(event.target.innerHTML));
+  };
+
   return (
-    <NavigateContainer className={isBurgerMenuOpen ? 'active' : ''} ref={nav} data-test-id='burger-navigation'>
+    <NavigateContainer
+      className={isBurgerMenuOpen ? 'active' : ''}
+      ref={nav} data-test-id='burger-navigation'>
       <NavigateList
         className={isOpenCategory ? 'open' : ''}
       >
-        <NavigateItem onClick={(event) => handlerClick(event)} data-info='books'>
+        <NavigateItem
+          onClick={(event) => handlerClick(event)}
+          data-info='books'>
           <NavigateLinkItem
             to='books/all'
             className={isSelectedCategory ? 'active' : ''}
@@ -86,10 +95,7 @@ export const Burger = () => {
             <NavigateLink
               to='books/all'
               data-test-id='burger-books'
-              onClick={() => {
-                dispatch(changeBurgerMenu(!isBurgerMenuOpen));
-                dispatch(changeCurrentCategory('Все книги'))
-              }}
+              onClick={(event) => handlerClickCategory(event)}
             >
               Все книги
             </NavigateLink>
@@ -98,9 +104,8 @@ export const Burger = () => {
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
-                onClick={() => {
-                  dispatch(changeBurgerMenu(!isBurgerMenuOpen));
-                  dispatch(changeCurrentCategory(item.name))
+                onClick={(event) => {
+                  handlerClickCategory(event)
                 }}
                 data-test-id={`burger-${item.path}`}
               >
@@ -110,13 +115,21 @@ export const Burger = () => {
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}
-        <NavigateItem onClick={(event) => clickOtherButtonAccordion(event)} data-info='rules'>
-          <NavigateLinkItem to='rules' data-test-id='burger-terms'>
+        <NavigateItem
+          onClick={(event) => clickOtherButtonAccordion(event)}
+          data-info='rules'>
+          <NavigateLinkItem
+            to='rules'
+            data-test-id='burger-terms'>
             Правила пользования
           </NavigateLinkItem>
         </NavigateItem>
-        <NavigateItem onClick={(event) => clickOtherButtonAccordion(event)} data-info='offer'>
-          <NavigateLinkItem to='offer' data-test-id='burger-contract'>
+        <NavigateItem
+          onClick={(event) => clickOtherButtonAccordion(event)}
+          data-info='offer'>
+          <NavigateLinkItem
+            to='offer'
+            data-test-id='burger-contract'>
             Договор оферты
           </NavigateLinkItem>
         </NavigateItem>
