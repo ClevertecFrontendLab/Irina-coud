@@ -27,13 +27,13 @@ export const Burger = () => {
 
   const dispatch = useDispatch();
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { category } = useParams();
 
-  const isSelectedBook = location.pathname.includes('books');
+  const isSelectedBook = pathname.includes('books');
 
-  const isSelectedCategory = location.pathname.includes(`books/${category}`);
+  const isSelectedCategory = pathname.includes(`books/${category}`);
 
   const { isBurgerMenuOpen, isOpenCategory } = useSelector((state: IState) => state.reducer);
 

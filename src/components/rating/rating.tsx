@@ -19,9 +19,9 @@ export const Rating = ({ rating }: IRating) => {
 
   const { category, bookId } = useParams();
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const isBookPageLocation = location.pathname.includes(`books/${category}/${bookId}`);
+  const isBookPageLocation = pathname.includes(`books/${category}/${bookId}`);
 
   return (
     <RatingWrapper>

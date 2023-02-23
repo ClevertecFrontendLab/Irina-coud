@@ -19,9 +19,9 @@ export const BooksContainer = () => {
 
   const { category, bookId } = useParams();
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const refetchLocation = location.pathname.includes(`books/${category}/${bookId}`)
+  const refetchLocation = pathname.includes(`books/${category}/${bookId}`)
 
   useEffect(() => {
     refetch()
