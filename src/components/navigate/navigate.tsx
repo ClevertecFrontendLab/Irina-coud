@@ -33,8 +33,9 @@ export const Navigate = () => {
 
   const { isOpenCategory, booksCategories } = useSelector((state: IState) => state.reducer);
 
-  function handlerClick(event: { currentTarget: any }) {
-    const payload = event.currentTarget.dataset.info;
+  function handlerClick(event: React.MouseEvent<HTMLElement>) {
+    const payload = event.currentTarget.dataset.info as string;
+
     dispatch(changeMenu(payload));
     event.currentTarget.classList.add('active');
     dispatch(changeOpenCategory(!isOpenCategory))
@@ -46,10 +47,16 @@ export const Navigate = () => {
   const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
   const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
+  function handlerClickCategory(event: React.ChangeEvent) {
+    dispatch(changeCurrentCategory(event.target.innerHTML));
+  };
+
   return (
     <NavigateContainer>
       <NavigateList>
-        <NavigateItem onClick={(event) => handlerClick(event)} data-info='books' >
+        <NavigateItem
+          onClick={() => handlerClick}
+          data-info='books' >
           <NavigateLinkItem
             to='books/all'
             className={isSelectedCategory ? 'active' : ''}
@@ -64,7 +71,7 @@ export const Navigate = () => {
             <NavigateLink
               to='books/all'
               data-test-id='navigation-books'
-              onClick={() => dispatch(changeCurrentCategory('Все книги'))}
+              onClick={() => handlerClickCategory}
             >
               Все книги
             </NavigateLink>
@@ -74,7 +81,7 @@ export const Navigate = () => {
               <NavigateLink
                 to={`books/${item.path}`}
                 data-test-id={`navigation-${item.path}`}
-                onClick={() => dispatch(changeCurrentCategory(item.name))}
+                onClick={() => handlerClickCategory}
               >
                 {item.name}
               </NavigateLink>
@@ -82,12 +89,16 @@ export const Navigate = () => {
             </NavigateCategory>
           ))}
         </NavigateCategories>) : ''}
-        <NavigateItem onClick={(event) => handlerClick(event)} data-info='rules'>
+        <NavigateItem
+          onClick={() => handlerClick}
+          data-info='rules'>
           <NavigateLinkItem to='rules' data-test-id='navigation-terms'>
             Правила пользования
           </NavigateLinkItem>
         </NavigateItem>
-        <NavigateItem onClick={(event) => handlerClick(event)} data-info='offer'>
+        <NavigateItem
+          onClick={() => handlerClick}
+          data-info='offer'>
           <NavigateLinkItem to='offer' data-test-id='navigation-contract'>
             Договор оферты
           </NavigateLinkItem>

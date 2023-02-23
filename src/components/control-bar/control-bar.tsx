@@ -25,7 +25,7 @@ export const ControlBar = () => {
 
   const { isActiveTail, isActiveList, isSearchActive, isSortActive } = useSelector((state: IState) => state.reducer);
 
-  function handlerClick(event: { currentTarget: { id: string; }; }) {
+  function handlerClick(event: React.MouseEvent<HTMLElement>) {
     const current = event.currentTarget.id;
 
     if (current === 'tail' && isActiveTail !== true || current === 'list' && isActiveList !== true) {

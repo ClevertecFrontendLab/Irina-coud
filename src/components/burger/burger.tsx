@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, RefObject, useRef } from 'react';
+import { AnchorHTMLAttributes, ReactEventHandler, RefObject, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
@@ -55,8 +55,8 @@ export const Burger = () => {
   const { data = [], isSuccess: isSuccessCategories } = useGetCategoriesQuery();
   const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
-  function handlerClick(event: { currentTarget: any }) {
-    const payload = event.currentTarget.dataset.info;
+  function handlerClick(event: React.MouseEvent<HTMLElement>) {
+    const payload = event.currentTarget.dataset.info as string;
 
     dispatch(changeMenu(payload));
     event.currentTarget.classList.add('active');
@@ -66,7 +66,7 @@ export const Burger = () => {
     }
   };
 
-  function handlerClickCategory(event: { target: any }) {
+  function handlerClickCategory(event: React.ChangeEvent) {
     dispatch(changeBurgerMenu(!isBurgerMenuOpen));
     dispatch(changeCurrentCategory(event.target.innerHTML));
   };
@@ -79,7 +79,7 @@ export const Burger = () => {
         className={isOpenCategory ? 'open' : ''}
       >
         <NavigateItem
-          onClick={(event) => handlerClick(event)}
+          onClick={() => handlerClick}
           data-info='books'>
           <NavigateLinkItem
             to='books/all'
@@ -95,7 +95,7 @@ export const Burger = () => {
             <NavigateLink
               to='books/all'
               data-test-id='burger-books'
-              onClick={(event) => handlerClickCategory(event)}
+              onClick={() => handlerClickCategory}
             >
               Все книги
             </NavigateLink>
@@ -104,9 +104,7 @@ export const Burger = () => {
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
-                onClick={(event) => {
-                  handlerClickCategory(event)
-                }}
+                onClick={() => handlerClickCategory}
                 data-test-id={`burger-${item.path}`}
               >
                 {item.name}
@@ -116,7 +114,7 @@ export const Burger = () => {
           ))}
         </NavigateCategories>) : ''}
         <NavigateItem
-          onClick={(event) => clickOtherButtonAccordion(event)}
+          onClick={() => clickOtherButtonAccordion}
           data-info='rules'>
           <NavigateLinkItem
             to='rules'
@@ -125,7 +123,7 @@ export const Burger = () => {
           </NavigateLinkItem>
         </NavigateItem>
         <NavigateItem
-          onClick={(event) => clickOtherButtonAccordion(event)}
+          onClick={() => clickOtherButtonAccordion}
           data-info='offer'>
           <NavigateLinkItem
             to='offer'
