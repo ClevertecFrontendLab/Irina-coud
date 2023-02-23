@@ -40,7 +40,7 @@ export const BookCard = () => {
   return (
     <React.Fragment>
       <BookCardWrapper />
-      {filteredBooks.length !== 0 ? (filteredBooks.map((card) => (
+      {filteredBooks.length ? (filteredBooks.map((card) => (
         <BooksCard key={card.id} data-test-id='card' to={String(card.id)} className={currentDisplay} onClick={() => dispatch(changeIdCurrentBook(String(card.id)))}>
           <BookImageContainer className={currentDisplay} >
             <BookImage src={card.image ? `${LINK_HOST}${card.image.url}` : `${emptyCat}`}
@@ -55,7 +55,7 @@ export const BookCard = () => {
             <BookBtn className={currentDisplay} onClick={(event) => event.preventDefault()}>Забронировать</BookBtn>
           </BookBtnContainer>
         </BooksCard>
-      ))) : filteredBooks.length === 0 && searchValue !== '' ? <EmptySearch /> : <EmptyFilteredBooks />}
+      ))) : !filteredBooks.length && searchValue !== '' ? <EmptySearch /> : <EmptyFilteredBooks />}
     </React.Fragment>
   )
 };
