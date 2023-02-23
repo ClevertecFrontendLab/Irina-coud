@@ -5,7 +5,7 @@ import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 import { changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
-import { IState } from '../../store/reducers/type';
+import { IBooksCategories, IState } from '../../store/reducers/type';
 
 import {
   AccordionButton,
@@ -69,7 +69,7 @@ export const Navigate = () => {
               Все книги
             </NavigateLink>
           </NavigateCategory>
-          {booksCategories.map((item: any) => (
+          {booksCategories.map((item: IBooksCategories) => (
             <NavigateCategory key={item.id}>
               <NavigateLink
                 to={`books/${item.path}`}
