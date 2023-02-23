@@ -1,7 +1,10 @@
-import { DocumentationList, DocumentationTitle, DocumentationWrapper } from './documentation.styled';
+import {
+  DocumentationList,
+  DocumentationTitle,
+  DocumentationWrapper
+} from './documentation.styled';
 
 export const Documentation = ({ title }: { title: string }) => (
-
   <DocumentationWrapper>
     <DocumentationTitle>{title === 'rules' ? 'Правила пользования' : 'Договор оферты'}</DocumentationTitle>
     <DocumentationList>
