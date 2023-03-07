@@ -134,7 +134,7 @@ export const Burger = () => {
       </NavigateList>
       <NavigateProfile>
         <NavigateItem>Профиль</NavigateItem>
-        <NavigateItem>Выход</NavigateItem>
+        <NavigateItem data-test-id='exit-button'>Выход</NavigateItem>
       </NavigateProfile>
     </NavigateContainer>
   );

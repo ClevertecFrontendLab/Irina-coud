@@ -7,8 +7,12 @@ import { BooksList } from './pages/books-list/books-list';
 import { Documentation } from './pages/documentation/documentation';
 import { Layout } from './components/layout/layout';
 import { BookPageContainer } from './pages/book-page/book-page-container';
+import { Registration } from './components/user/registration/registration';
+import { Authorization } from './components/user/authorization/authorization';
 
 import { IState } from './store/reducers/type';
+import { FormLayout } from './components/user/user-form';
+
 
 export const App = () => {
 
@@ -25,6 +29,12 @@ export const App = () => {
         </Route>
         <Route path='books/:category/:bookId' element={<BookPageContainer />} />
       </Route>
+      <Route element={<FormLayout />}>
+        <Route path='/' element={<Navigate to='/auth' />} />
+        <Route path='/auth' element={<Authorization />} />
+        <Route path='/registration' element={<Registration />} />
+      </Route>
+
     </Routes>
   )
 };

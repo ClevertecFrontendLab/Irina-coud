@@ -1,25 +1,30 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Footer } from '../footer/footer';
 import { Header } from '../header/header';
-import { Loader } from '../loader/loader';
-import { ErrorPopup } from '../error/error';
-
-import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 
 import { Wrapper, WrapperBox } from './layout.styled';
 
+import { getLoginToken } from '../../utils/get-token';
+
 export const Layout = () => {
 
-  const { isLoading: isLoadingBooks, error: booksError } = useGetBooksQuery();
-  const { isLoading: isLoadingCategories, error: categoryError } = useGetCategoriesQuery();
+  const token = getLoginToken();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/auth');
+    }
+  }, [navigate, token]);
 
   return (
     <Wrapper>
       <Header />
       <WrapperBox>
-        {isLoadingBooks && isLoadingCategories ? <Loader /> : <Outlet />}
-        {booksError || categoryError ? <ErrorPopup /> : ''}
+        <Outlet />
       </WrapperBox>
       <Footer />
     </Wrapper>
