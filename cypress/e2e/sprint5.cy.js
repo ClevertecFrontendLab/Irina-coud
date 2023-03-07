@@ -55,17 +55,21 @@ describe('authorization and registartion', () => {
                     authorization: `Bearer ${token}`,
                 });
             });
+            cy.get('[data-test-id=button-burger]').click();
+            cy.get('[data-test-id=exit-button]').scrollIntoView().click();
+            cy.url().should('contain', '/auth');
+        });
+        it('redirect authorization', () => {
+            cy.get('[data-test-id=auth-form] input[name=identifier]').type('TestUser1');
+            cy.get('[data-test-id=auth-form] input[name=password]').type('Qwerty123');
+            cy.get('button').contains('вход', { matchCase: false }).should('be.enabled').click();
+            cy.wait('@authorize');  
             cy.visit('http://localhost:3000/#/auth');
             cy.url().should('contain', '/books/all');
             cy.visit('http://localhost:3000/#/registration');
             cy.url().should('contain', '/books/all');
             cy.visit('http://localhost:3000/#/forgot-pass');
             cy.url().should('contain', '/books/all');
-            cy.wait('@categories');
-            cy.wait('@books');
-            cy.get('[data-test-id=button-burger]').click();
-            cy.get('[data-test-id=exit-button]').scrollIntoView().click();
-            cy.url().should('contain', '/auth');
         });
         it('server error authorization', () => {
             cy.intercept('/api/auth/local', {
