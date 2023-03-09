@@ -1,18 +1,21 @@
-import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getLoginToken } from '../utils/get-token';
 
 import { loadBooks, loadBooksCategories } from './reducers/main-slice';
 
-
-
-
 export interface IPayloadAuth {
   identifier: string,
   password: string
-
 }
 
-
+export interface IPayloadRegister {
+  email: string,
+  username: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+}
 
 export interface IResponseAuth {
   jwt: string,
@@ -29,10 +32,7 @@ export interface IResponseAuth {
     lastName: string,
     phone: string,
   }
-
-
 }
-
 
 export interface IError {
   data: null,
@@ -42,9 +42,7 @@ export interface IError {
     message: string,
     details: object
   }
-
 }
-
 
 export const booksInfoApi = createApi({
   reducerPath: 'booksInfoApi',
@@ -94,25 +92,12 @@ export const booksInfoApi = createApi({
       providesTags: () => ['categories']
     }),
 
-    registrationUser: build.mutation({
+    registrationUser: build.mutation<IResponseAuth | IError, IPayloadRegister>({
       query: (payload) => ({
         url: '/api/auth/local/register',
         method: 'POST',
         body: payload
       }),
-
-      // async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-
-      //     const { jwt } = data;
-
-      //     document.cookie = `token=${jwt}`
-      //   } catch (e) {
-      //     console.error('userApi createUser error', e);
-      //   }
-      // },
-
     }),
 
     AuthUser: build.mutation<IResponseAuth, IPayloadAuth>({
@@ -135,8 +120,26 @@ export const booksInfoApi = createApi({
       },
 
     }),
+
+    forgotPassword: build.mutation({
+      query: (payload) => ({
+        url: '/api/auth/forgot-password',
+        method: 'POST',
+        body: payload
+      }),
+
+    }),
+
+    resetPassword: build.mutation({
+      query: (payload) => ({
+        url: '/api/auth/reset-password',
+        method: 'POST',
+        body: payload
+      }),
+
+    }),
   })
 });
 
-export const { useGetBooksQuery, useGetBookQuery, useGetCategoriesQuery, useRegistrationUserMutation, useAuthUserMutation } = booksInfoApi;
+export const { useGetBooksQuery, useGetBookQuery, useGetCategoriesQuery, useRegistrationUserMutation, useAuthUserMutation, useForgotPasswordMutation, useResetPasswordMutation } = booksInfoApi;
 

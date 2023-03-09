@@ -15,4 +15,8 @@ letter-spacing: 0.2px;
 color: #A7A7A7;
 padding: 0 0 0 12px;
 margin: -32px 0 0 0;
+&.error{
+  margin: -10px 0 0 0;
+
+}
 `;

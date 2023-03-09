@@ -5,6 +5,17 @@ import styled from 'styled-components';
 export const HeaderWrapper = styled.header`
   display: flex;
   justify-content: center;
+ 
+  height: 105px;
+      @media screen and (max-width: 330px) {
+    height: 76px;
+    }
+  &.open{
+    box-shadow: 4px 4px 4px rgba(54, 54, 54, 0.05), -4px 4px 4px rgba(54, 54, 54, 0.05);
+       @media screen and (max-width: 870px) {
+        box-shadow: none;
+    }
+  }
 `;
 
 export const HeaderContent = styled.div`
@@ -13,7 +24,8 @@ export const HeaderContent = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   max-width: 1110px;
-  width: 100%;
+  width: 100%; 
+  position: relative;
 `;
 
 export const HeaderLogoBox = styled.div`
@@ -145,4 +157,39 @@ export const HeaderBurger = styled.div`
       }
        }
     }
+`;
+
+export const UserLogo = styled.img`
+cursor: pointer;
+`
+
+export const UserBox = styled.div`
+
+  display: none;
+&.open{
+  display: block;
+background: #FFFFFF;
+box-shadow: 4px 4px 4px rgba(54, 54, 54, 0.05), -4px 4px 4px rgba(54, 54, 54, 0.05);
+border-radius: 0px 0px 10px 10px;
+width: 270px;
+height: 152px;
+  position: absolute;
+  z-index: 999999999;
+  right: 0;
+  top: 105px;   
+   @media screen and (max-width: 870px) {
+      display: none;
+    }
+}
+`;
+
+export const UserBoxList = styled.ul`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    max-height: 270px;
+    height: 100%;
+    row-gap: 32px;
+    padding: 0 24px;
 `;

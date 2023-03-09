@@ -13,6 +13,9 @@ flex-direction: column;
 row-gap: 59px;
 width: 100wh;
 height: 100vh;
+    @media screen and (max-width: 650px) {
+    padding: 0 16px;
+   }
 `;
 
 export const Title = styled.p`
@@ -35,6 +38,12 @@ padding: 48px 56px;
     display: flex;
     flex-direction: column;
     row-gap: 16px;
+    &.forgot{
+      border-radius: 0 0 16px 16px;
+    }
+        @media screen and (max-width: 330px) {
+padding: 24px 16px;
+   }
 `;
 
 export const FormTitle = styled.p`
@@ -72,6 +81,8 @@ padding: 19px 12px;
 max-width: 416px;
 width: 100%;
 position: relative;
+background-color: transparent;
+z-index: 1;
 :focus + label,
 :not(:placeholder-shown) ~ label{
 top: 0; 
@@ -87,6 +98,7 @@ height: 20px;
 top: 19px;
 left: 90%;
 cursor: pointer;
+z-index:5;
 &.visible{
 background: url(${openEye});
 }
@@ -100,6 +112,7 @@ position: absolute;
 top: 19px;
 left: 12px;
 cursor: text;
+/* z-index: -1; */
 `;
 
 export const FormButton = styled.button`
@@ -119,13 +132,20 @@ text-align: center;
 &.step1{
   margin: 24px 0 0 0;
 }
+    @media screen and (max-width: 330px) {
+font-size: 12px;
+line-height: 18px;
+   }
 `;
 
 export const BoxInfo = styled.div`
 display: flex;
 align-items: center;
 column-gap: 16px;
-
+    @media screen and (max-width: 650px) {
+    flex-direction: column;
+    align-items: flex-start;
+   }
 `;
 
 export const TextHelp = styled.p`
@@ -151,3 +171,8 @@ background: url(${arrow}) 115px center / 20px no-repeat;
 background: url(${arrow}) 60px center / 20px no-repeat;
 }
 `;
+
+export const InputWrapper = styled.div`
+    background: #F9F9FA;
+    height: 56px;
+`

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Burger } from '../burger/burger';
@@ -16,12 +17,20 @@ import {
   HeaderUserBox,
   HeaderWelcome,
   HeaderLogoLink,
-  HeaderBurger
+  HeaderBurger,
+  UserBox,
+  UserLogo,
+  UserBoxList,
 } from './header.styled';
+import { NavigateItem } from '../navigate/navigate.styled';
+import { useDeleteToken } from '../../utils/delete-token';
+
 
 export const Header = () => {
 
   const dispatch = useDispatch();
+
+  const [isOpenUserBox, setIsOpenUserBox] = useState(false);
 
   const { isBurgerMenuOpen } = useSelector((state: IState) => state.reducer);
 
@@ -29,8 +38,10 @@ export const Header = () => {
     dispatch(changeBurgerMenu(!isBurgerMenuOpen));
   };
 
+  const unAuthorizedUser = useDeleteToken();
+
   return (
-    <HeaderWrapper>
+    <HeaderWrapper className={isOpenUserBox ? 'open' : ''}>
       <HeaderContent>
         <HeaderLogoBox>
           <HeaderLogoLink to='/'><img src={logo} alt='logo' /></HeaderLogoLink>
@@ -42,9 +53,17 @@ export const Header = () => {
         </HeaderLogoBox>
         <HeaderUserBox>
           <HeaderWelcome >Привет, Иван!</HeaderWelcome>
-          <img src={avatar} alt='avatar' />
+          <UserLogo src={avatar} alt='avatar' onClick={() => setIsOpenUserBox(!isOpenUserBox)} />
+
         </HeaderUserBox>
+        <UserBox className={isOpenUserBox ? 'open' : ''} >
+          <UserBoxList>
+            <NavigateItem>Профиль</NavigateItem>
+            <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
+          </UserBoxList>
+        </UserBox>
       </HeaderContent>
+
     </HeaderWrapper>
   )
 };

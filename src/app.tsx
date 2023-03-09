@@ -12,6 +12,7 @@ import { Authorization } from './components/user/authorization/authorization';
 
 import { IState } from './store/reducers/type';
 import { FormLayout } from './components/user/user-form';
+import { ForgotPassword } from './components/user/forgot-password/forgot-password';
 
 
 export const App = () => {
@@ -33,6 +34,7 @@ export const App = () => {
         <Route path='/' element={<Navigate to='/auth' />} />
         <Route path='/auth' element={<Authorization />} />
         <Route path='/registration' element={<Registration />} />
+        <Route path='/forgot-pass' element={<ForgotPassword />} />
       </Route>
 
     </Routes>

@@ -1,11 +1,12 @@
-import { AnchorHTMLAttributes, ReactEventHandler, RefObject, useRef } from 'react';
+import { RefObject, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useOnClickOutside } from '../../utils/click-outside';
+import { useDeleteToken } from '../../utils/delete-token';
 
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
 import { changeBurgerMenu, changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
@@ -71,6 +72,19 @@ export const Burger = () => {
     dispatch(changeCurrentCategory(String(event.currentTarget.innerHTML)));
   };
 
+  const navigate = useNavigate();
+
+  const unAuthorizedUser = useDeleteToken();
+
+  //   async function unauthorizedUser() {
+  //     await deleteCookie();
+  //     navigate('/')
+  //   }
+
+  //  function deleteCookie() {
+  //     document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  //   }
+
   return (
     <NavigateContainer
       className={isBurgerMenuOpen ? 'active' : ''}
@@ -79,7 +93,7 @@ export const Burger = () => {
         className={isOpenCategory ? 'open' : ''}
       >
         <NavigateItem
-          onClick={() => handlerClick}
+          onClick={(event) => handlerClick(event)}
           data-info='books'>
           <NavigateLinkItem
             to='books/all'
@@ -134,7 +148,7 @@ export const Burger = () => {
       </NavigateList>
       <NavigateProfile>
         <NavigateItem>Профиль</NavigateItem>
-        <NavigateItem data-test-id='exit-button'>Выход</NavigateItem>
+        <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
       </NavigateProfile>
     </NavigateContainer>
   );

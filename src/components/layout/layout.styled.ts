@@ -5,11 +5,11 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: calc(100vh - 31px);
-  row-gap: 55px;
-      padding: 31px 0px 0 0px;
+  row-gap: 47px;
+      /* padding: 31px 0px 0 0px; */
     @media screen and (max-width: 330px) {
-      gap: 32px;
-          padding: 24px 0px 0 0px;
+      gap: 8px;
+          /* padding: 24px 0px 0 0px; */
     }
 `;
 

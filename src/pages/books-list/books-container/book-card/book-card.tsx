@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { Rating } from '../../../../components/rating/rating';
 import { Highlight } from './highlight/highlight';
@@ -26,7 +27,7 @@ import {
   BookTitle,
   RatingBox
 } from './book-card.styled';
-import { useLocation, useParams } from 'react-router-dom';
+
 import { useGetBooksQuery, useGetCategoriesQuery } from '../../../../store/books-info-api';
 import { Loader } from '../../../../components/loader/loader';
 import { ErrorPopup } from '../../../../components/error/error';
