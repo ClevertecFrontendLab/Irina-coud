@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { IError, useAuthUserMutation } from '../../../store/books-info-api';
+
+
 
 import { getLoginToken } from '../../../utils/get-token';
 import { Loader } from '../../loader/loader';
@@ -21,6 +26,7 @@ import {
   TextHelp
 } from '../user-form.styled';
 import { TextError, UpdateButton } from './authorization.styled';
+import { TextHelperError } from '../forgot-password/forgot-password.styled';
 
 export interface IStatusError {
   status: number;
@@ -31,7 +37,28 @@ export interface IStatusError {
 
 export const Authorization = () => {
 
-  const { register, handleSubmit, watch } = useForm();
+
+
+  const schema = yup.object().shape({
+    identifier: yup.string()
+      .required('Поле не может быть пустым')
+    ,
+    password: yup.string()
+      .required('Поле не может быть пустым')
+  })
+
+
+  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+
+    mode: 'all',
+    defaultValues: {
+      identifier: '',
+      password: '',
+    },
+    criteriaMode: 'all',
+    reValidateMode: 'onBlur',
+    resolver: yupResolver(schema),
+  });
 
   const token = getLoginToken();
 
@@ -67,28 +94,30 @@ export const Authorization = () => {
 
   const handler = onSubmit;
 
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id='auth-form'>
       {isLoading && <Loader />}
       {error && status !== 400
         ? <InfoPopup data-test-id='status-block' title='Вход не выполнен' text='Что-то пошло не так. Попробуйте еще раз' buttonText='Повторить' handler={handler} />
         : (<><FormTitle>Bход в личный кабинет</FormTitle>
-          <FormWrapper className={isError ? 'error' : ''}>
+          <FormWrapper className={errors.identifier ? 'error' : ''}>
             <InputWrapper>
-              <Input {...register('identifier', { required: true })} id="identifier" placeholder=" " />
+              <Input {...register('identifier')} id="identifier" placeholder=" " />
               <InputLabel htmlFor="identifier">Логин</InputLabel>
             </InputWrapper>
           </FormWrapper>
-          <FormWrapper className={isError ? 'error' : ''}>
+          {errors?.identifier && <TextHelperError data-test-id='hint'><span>{errors?.identifier?.message}</span></TextHelperError>}
+          <FormWrapper className={errors.password ? 'error' : ''}>
             <InputWrapper>
-              <Input {...register('password', { required: true })} type={isVisiblePassword ? 'text' : 'password'} id="password" placeholder=" " />
+              <Input {...register('password')} type={isVisiblePassword ? 'text' : 'password'} id="password" placeholder=" " />
               <InputLabel htmlFor="password">Пароль</InputLabel>
               {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
             </InputWrapper>
           </FormWrapper>
-          {status === 400
-            ? <TextError onClick={() => navigate('/forgot-pass')}><span>Неверный логин или пароль!</span>Восстановить?</TextError>
-            : <UpdateButton onClick={() => navigate('/forgot-pass')}>Забыли логин или пароль?</UpdateButton>}
+          {errors?.password && <TextHelperError data-test-id='hint'><span>{errors?.password?.message}</span></TextHelperError>}
+          {status === 400 && <TextHelperError data-test-id='hint'><span>Неверный логин или пароль!</span></TextHelperError>}
+          <UpdateButton onClick={() => navigate('/forgot-pass')}>{status === 400 ? 'Восстановить?' : 'Забыли логин или пароль?'}</UpdateButton>
           <FormButton>Вход</FormButton>
           <BoxInfo>
             <TextHelp>Нет учётной записи?</TextHelp>

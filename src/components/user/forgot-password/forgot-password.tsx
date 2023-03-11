@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ import {
   TextHelp
 } from "../user-form.styled";
 import { TextHelperError } from "./forgot-password.styled";
+import { getLoginToken } from "../../../utils/get-token";
 
 export interface IError {
   error: string,
@@ -125,13 +126,21 @@ export const ForgotPassword = () => {
   const passwordAttr = register('password');
   const emailAttr = register('email');
 
+  const token = getLoginToken();
+
   const reg = checkLocation ? passwordAttr : emailAttr;
+
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  }, [navigate, token]);
 
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id={checkLocation ? 'reset-password-form' : 'send-email-form'} className={isForgotPage && !checkLocation ? 'forgot' : ''}>
       {isLoading || isLoadingReset
-        && <Loader />}
+        && <Loader data-test-id='loader' />}
       {isSuccessForgot
         ? <InfoPopup data-test-id='status-block' title='Письмо выслано' text='Перейдите в вашу почту, чтобы воспользоваться подсказками по восстановлению пароля' isNotButton={true} />
         : isErrorReset
@@ -153,9 +162,9 @@ export const ForgotPassword = () => {
                     onBlur={(event) => {
                       reg.onBlur(event)
 
-                      if (errors.password?.message) {
-                        setIsBlurPassword(true)
-                      }
+                      // if (errors.password?.message) {
+                      setIsBlurPassword(true)
+                      // }
                     }}
                   />
                   <InputLabel htmlFor={checkLocation ? 'password' : 'email'}>{checkLocation ? 'Новый пароль' : 'Email'}</InputLabel>
@@ -164,10 +173,10 @@ export const ForgotPassword = () => {
                 </InputWrapper>
               </FormWrapper>
               {errors?.email ? <TextHelperError data-test-id='hint'><span>{errors?.email?.message}</span></TextHelperError> : error && <TextHelperError data-test-id='hint'><span>{systemError}</span></TextHelperError>}
-              {errors?.password?.type === 'required'
+              {errors?.password?.type === 'required' && isBlurPassword
                 ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
                 : (checkLocation &&
-                  <TextHelper data-test-id='hint'><ErrorHighlight className={isBlurPassword ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight></ErrorHighlight> </TextHelper>
+                  <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
                 )}
               <TextHelper className='forgot' data-test-id='hint'>{!checkLocation && 'На этот email будет отправлено письмо с инструкциями по восстановлению пароля'}</TextHelper>
               {checkLocation && (<FormWrapper className={isError ? 'error' : ''}>

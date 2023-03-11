@@ -32,10 +32,5 @@ height: 20px;
 `
 
 export const TextHelperError = styled(TextHelper)`
-
- span{
-    color: red;
-    }
-
- 
+    color:rgb(244, 44, 79);
 `;

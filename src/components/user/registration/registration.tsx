@@ -88,7 +88,7 @@ export const Registration = () => {
     ,
     password: yup.string()
       .required('Поле не может быть пустым')
-      .matches(/[a-zA-Zа-яА-Я\d].{8,}/, 'не менее 8 символов')
+      .matches(/[a-zA-Zа-яА-Я\d].{7,}/, 'не менее 8 символов')
       .matches(/[А-ЯA-Z]/, 'заглавной буквой')
       .matches(/[\d]/, 'цифрой'),
   })
@@ -131,17 +131,13 @@ export const Registration = () => {
 
 
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors]);
-
-
-
   const isEmptyErrors = !Object.keys(errors).length;
 
   const errorsPassword = errors?.password?.types?.matches as string || '';
+  const errorsUsername = errors?.username?.types?.matches as string || '';
 
   const watchPasswordField = watch('password');
+  const watchUsernameField = watch('username');
 
   function onSubmit(data: any) {
     if (step < 3) {
@@ -176,6 +172,7 @@ export const Registration = () => {
   const userNameAttr = register('username');
   const passwordAttr = register('password');
 
+  console.log(errors.username?.message)
   console.log(errors)
 
   const content = function () {
@@ -198,25 +195,36 @@ export const Registration = () => {
                   }}
                   onBlur={(event) => {
                     userNameAttr.onBlur(event);
-                    if (
-                      errors.username?.message
-                    ) {
-                      setIsBlurUsername(true)
-                    }
+                    // if (
+                    //   errors.username
+                    // ) {
+                    setIsBlurUsername(true)
+                    // }
                   }}
                 />
                 <InputLabel htmlFor="userName">Придумайте логин для входа</InputLabel>
               </InputWrapper>
             </FormWrapper>
-            {errors?.username?.type === 'required'
+
+
+
+
+
+            {errors?.username?.type === 'required' && isBlurUsername
               ? <TextHelperError data-test-id='hint'><span>{errors.username?.message}</span></TextHelperError>
               :
-              (<TextHelper data-test-id='hint'>
-                <ErrorHighlight
-                  className={isBlurUsername ? 'active' : ''}
-                > Используйте для логина <ErrorHighlight className={errors?.username?.message === 'латинский алфавит' ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errors?.username?.message === 'цифры' ? 'active' : ''}>цифры</ErrorHighlight> </ErrorHighlight>
+              (<TextHelper data-test-id='hint' className={isBlurUsername && errors.username ? 'active' : ''}>
+                Используйте для логина <ErrorHighlight className={errorsUsername.includes('латинский алфавит') && watchUsernameField ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errorsUsername.includes('цифры') && watchUsernameField ? 'active' : ''}>цифры</ErrorHighlight>
               </TextHelper>)
             }
+
+
+
+
+
+
+
+
             <FormWrapper className={errors.password ? 'error' : ''}>
               <InputWrapper>
                 <Input
@@ -233,20 +241,35 @@ export const Registration = () => {
 
                     passwordAttr.onBlur(event)
 
-                    if (errors.password?.message) {
-                      setIsBlurPassword(true)
-                    }
+                    // if (errors.password?.message) {
+                    setIsBlurPassword(true)
+                    // }
                   }} />
                 <InputLabel htmlFor="password">Пароль</InputLabel>
                 {isEmptyErrors && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
                 {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
               </InputWrapper>
             </FormWrapper>
-            {errors?.password?.type === 'required'
+
+
+
+
+
+            {errors?.password?.type === 'required' && isBlurPassword
               ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
               : (
-                <TextHelper data-test-id='hint'><ErrorHighlight className={isBlurPassword ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight></ErrorHighlight> </TextHelper>
+                <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}> Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') && watchPasswordField ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') && watchPasswordField ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') && watchPasswordField ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
               )}
+
+
+
+
+
+
+
+
+
+
           </React.Fragment >
         );
       case 2:
@@ -308,7 +331,7 @@ export const Registration = () => {
             <FormButton
               className={isEmptyErrors ? 'step' : 'dis'}
               disabled={!isEmptyErrors}>
-              {step === 1 ? 'Следующий шаг' : step === 2 ? 'Последний шаг' : 'Зарегистрироваться'}
+              {step === 1 ? 'следующий шаг' : step === 2 ? 'последний шаг' : 'зарегистрироваться'}
             </FormButton>
             <BoxInfo>
               <TextHelp>Есть учётная запись?</TextHelp>

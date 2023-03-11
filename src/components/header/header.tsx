@@ -59,7 +59,8 @@ export const Header = () => {
         <UserBox className={isOpenUserBox ? 'open' : ''} >
           <UserBoxList>
             <NavigateItem>Профиль</NavigateItem>
-            <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
+            {/* <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem> */}
+            <NavigateItem onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
           </UserBoxList>
         </UserBox>
       </HeaderContent>

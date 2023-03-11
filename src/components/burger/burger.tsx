@@ -8,7 +8,7 @@ import { CountNavigate } from './count-navigate/count-navigate';
 import { useOnClickOutside } from '../../utils/click-outside';
 import { useDeleteToken } from '../../utils/delete-token';
 
-import { useGetBooksQuery, useGetCategoriesQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
+import { useGetBooksQuery, useGetCategoriesQuery, useLazyGetBooksQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
 import { changeBurgerMenu, changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IState } from '../../store/reducers/type';
 
@@ -54,17 +54,31 @@ export const Burger = () => {
     }
   });
 
+  // const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
+  // const { isSuccess: isSuccessBooks } = useGetBooksQuery();
+
+  // const token = getLoginToken();
+
+  // useEffect(() => {
+  //   if (token) {
+  //     triggerCategories()
+  //   }
+
+  // }, [triggerCategories, token]);
+
+
   const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
-  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
+  const [triggerBooks, { isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
 
   const token = getLoginToken();
 
   useEffect(() => {
     if (token) {
-      triggerCategories()
+      triggerCategories();
+      triggerBooks();
     }
+  }, [triggerCategories, triggerBooks, token]);
 
-  }, [triggerCategories, token]);
 
 
 

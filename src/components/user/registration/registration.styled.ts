@@ -9,7 +9,7 @@ line-height: 18px;
 margin: -24px 0 0 0;
 `;
 
-export const TextHelper = styled.p`
+export const TextHelper = styled.div`
 /* display: block; */
 font-weight: 500;
 font-size: 12px;
@@ -20,9 +20,8 @@ padding: 0 0 0 12px;
 margin: -32px 0 0 0;
 &.active{
 
-  span{
-color: red;
-}
+color: #F42C4F;
+
 }
 &.forgot{
 margin: -18px 0 0 0;
@@ -32,7 +31,7 @@ margin: -18px 0 0 0;
 
 export const ErrorHighlight = styled.span`
 &.active{
-  color: red;
+  color: rgb(244, 44, 79);
 }
 `;
 

@@ -70,7 +70,7 @@ position: relative;
 }
 &.error{
   ::after{
-    background: red;
+    background: #F42C4F;
   }
 }
 `;
