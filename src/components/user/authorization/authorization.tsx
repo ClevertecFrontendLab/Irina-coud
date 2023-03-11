@@ -25,7 +25,7 @@ import {
   InputWrapper,
   TextHelp
 } from '../user-form.styled';
-import { TextError, UpdateButton } from './authorization.styled';
+import { UpdateButton } from './authorization.styled';
 import { TextHelperError } from '../forgot-password/forgot-password.styled';
 
 export interface IStatusError {
@@ -64,7 +64,7 @@ export const Authorization = () => {
 
   const navigate = useNavigate();
 
-  const [authUser, { isLoading, isError, error }] = useAuthUserMutation();
+  const [authUser, { isLoading, error }] = useAuthUserMutation();
 
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 

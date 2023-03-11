@@ -86,14 +86,10 @@ export const ForgotPassword = () => {
 
   const isForgotPage = pathname.includes('forgot-pass');
 
-  // const { error: systemError } = error as IError || {}
-
-
   const code = checkLocation.slice(6);
 
   function onSubmit(data: any) {
     if (checkLocation) {
-
 
       const resetData = {
         password: data.password,
@@ -166,13 +162,10 @@ export const ForgotPassword = () => {
                       onBlur={(event) => {
                         reg.onBlur(event)
 
-                        // if (errors.password?.message) {
                         setIsBlurPassword(true)
-                        // }
                       }}
                     />
                     <InputLabel htmlFor={checkLocation ? 'password' : 'email'}>{checkLocation ? 'Новый пароль' : 'Email'}</InputLabel>
-                    {/* {!errors?.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />} */}
                     {!errors.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
                     {checkLocation && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
                   </InputWrapper>
@@ -196,10 +189,7 @@ export const ForgotPassword = () => {
                       }}
                       onBlur={(event) => {
                         passwordConfirmationAttr.onBlur(event)
-
-                        // if (errors.password?.message) {
                         setIsBlurPasswordConfirmation(true)
-                        // }
                       }}
                     />
                     <InputLabel htmlFor="passwordConfirmation">Повторите пароль</InputLabel>

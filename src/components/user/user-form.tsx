@@ -10,6 +10,7 @@ import { FormBox, Title, Wrapper } from './user-form.styled';
 export const FormLayout = () => {
 
   const { pathname } = useLocation();
+
   const navigate = useNavigate();
 
   const checkLocation = useLocation().search;

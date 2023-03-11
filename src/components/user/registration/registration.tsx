@@ -195,21 +195,13 @@ export const Registration = () => {
                   }}
                   onBlur={(event) => {
                     userNameAttr.onBlur(event);
-                    // if (
-                    //   errors.username
-                    // ) {
+
                     setIsBlurUsername(true)
-                    // }
                   }}
                 />
                 <InputLabel htmlFor="userName">Придумайте логин для входа</InputLabel>
               </InputWrapper>
             </FormWrapper>
-
-
-
-
-
             {errors?.username?.type === 'required' && isBlurUsername
               ? <TextHelperError data-test-id='hint'><span>{errors.username?.message}</span></TextHelperError>
               :
@@ -217,14 +209,6 @@ export const Registration = () => {
                 Используйте для логина <ErrorHighlight className={errorsUsername.includes('латинский алфавит') && watchUsernameField ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errorsUsername.includes('цифры') && watchUsernameField ? 'active' : ''}>цифры</ErrorHighlight>
               </TextHelper>)
             }
-
-
-
-
-
-
-
-
             <FormWrapper className={errors.password ? 'error' : ''}>
               <InputWrapper>
                 <Input
@@ -238,38 +222,20 @@ export const Registration = () => {
                     setIsBlurPassword(false)
                   }}
                   onBlur={(event) => {
-
                     passwordAttr.onBlur(event)
 
-                    // if (errors.password?.message) {
                     setIsBlurPassword(true)
-                    // }
                   }} />
                 <InputLabel htmlFor="password">Пароль</InputLabel>
                 {!errors.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
                 {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
               </InputWrapper>
             </FormWrapper>
-
-
-
-
-
             {errors?.password?.type === 'required' && isBlurPassword
               ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
               : (
                 <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}> Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') && watchPasswordField ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') && watchPasswordField ? 'active' : ''}>заглавной буквой</ErrorHighlight> и <ErrorHighlight className={errorsPassword.includes('цифрой') && watchPasswordField ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
               )}
-
-
-
-
-
-
-
-
-
-
           </React.Fragment >
         );
       case 2:
@@ -337,9 +303,7 @@ export const Registration = () => {
               <TextHelp>Есть учётная запись?</TextHelp>
               <Button className='authorization' onClick={() => navigate('/auth')}>Войти</Button>
             </BoxInfo>
-
           </>}
     </Form>
-
   )
 };

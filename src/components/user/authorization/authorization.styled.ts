@@ -22,7 +22,4 @@ export const TextError = styled(UpdateButton)`
 display: flex;
 flex-direction: column;
 color: #363636;
-/* >span{
-color: #F42C4F;
-} */
 `
