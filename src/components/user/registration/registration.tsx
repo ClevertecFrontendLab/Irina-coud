@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
+
 
 import { IError, useRegistrationUserMutation } from '../../../store/books-info-api';
 import { getLoginToken } from '../../../utils/get-token';
@@ -13,16 +14,20 @@ import { InfoPopup } from '../info-popup/info-popup';
 import {
   BoxInfo,
   Button,
+  CheckIcon,
   Form,
   FormButton,
   FormTitle,
   FormWrapper,
   Input,
+  InputIcon,
   InputLabel,
   InputWrapper,
   TextHelp
 } from '../user-form.styled';
 import {
+  ErrorHighlight,
+  InputPhone,
   StepsInfo,
   TextHelper
 } from './registration.styled';
@@ -38,77 +43,27 @@ export interface IStatusError {
 
 export const Registration = () => {
 
-
-  const validationSchema = yup.object().shape({
-    username: yup.string()
-      .required('Поле не может быть пустым')
-    ,
-    password: yup.string().required('Поле не может быть пустым').min(8),
-    firstName: yup.string().required('Поле не может быть пустым'),
-    lastName: yup.string().required('Поле не может быть пустым'),
-    phone: yup.number().required('Поле не может быть пустым'),
-    email: yup.string().required('Поле не может быть пустым'),
-  })
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    // clearErrors,
-  } = useForm(
-    {
-      resolver: yupResolver(validationSchema),
-      mode: 'onBlur',
-      defaultValues: {
-        username: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: ''
-      },
-
-    });
-
   const [registrationUser, { isLoading, isSuccess, error: errorReg }] = useRegistrationUserMutation();
-
-  // console.log(!!errors.username?.message)
-  // console.log(errors)
-
-
-  console.log(errors)
 
   const navigate = useNavigate();
 
+
   const [step, setStep] = useState(1);
-  const [isErrors, setIsErrors] = useState(false)
+  const [isErrors, setIsErrors] = useState(false);
+  const [isBlurUsername, setIsBlurUsername] = useState(false);
+  const [isBlurPassword, setIsBlurPassword] = useState(false);
+  const [isFocusPhone, setIsFocusPhone] = useState(false);
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const token = getLoginToken();
 
   const { status } = errorReg as IStatusError || {};
 
-  function onSubmit(data: any) {
-    console.log(data)
-    registrationUser(data).then((result) => {
-      const { error } = result as IError || {};
-
-      if (error) {
-        setIsErrors(true)
-      }
-    })
-  };
 
   useEffect(() => {
     if (token) {
       navigate('/');
     }
   }, [navigate, token]);
-
-  function handlerClick() {
-    if (step < 3) {
-      setStep((i) => i + 1)
-    }
-  };
 
   const title = errorReg ? 'Данные не сохранились' : 'Регистрация успешна';
   const text = errorReg && status === 400
@@ -123,6 +78,88 @@ export const Registration = () => {
       : 'Вход';
 
 
+  const handler = errorReg && status !== 400 ? onSubmit : handlerButtonPopup;
+
+  const schema1 = yup.object().shape({
+    username: yup.string()
+      .required('Поле не может быть пустым')
+      .matches(/[a-zA-Z]/, 'латинский алфавит')
+      .matches(/[\d]/, 'цифры')
+    ,
+    password: yup.string()
+      .required('Поле не может быть пустым')
+      .matches(/[a-zA-Zа-яА-Я\d].{8,}/, 'не менее 8 символов')
+      .matches(/[А-ЯA-Z]/, 'заглавной буквой')
+      .matches(/[\d]/, 'цифрой'),
+  })
+  const schema2 = yup.object().shape({
+    firstName: yup.string().required('Поле не может быть пустым'),
+    lastName: yup.string().required('Поле не может быть пустым'),
+  })
+  const schema3 = yup.object().shape({
+    phone: yup.string().required('Поле не может быть пустым')
+      .matches(/^\+?375((\s\(33\)\s\d{3}-\d{2}-\d{2})|(\s\(29\)\s\d{3}-\d{2}-\d{2})|(\s\(44\)\s\d{3}-\d{2}-\d{2})|(\s\(25\)\s\d{3}-\d{2}-\d{2}))\s*$/, 'В формате +375 (xx) xxx-xx-xx'),
+    email: yup.string().required('Поле не может быть пустым')
+      .matches(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i, 'Введите корректный e-mail'),
+  })
+
+  const validationSchema = step === 1 ? schema1 : step === 2 ? schema2 : schema3;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    reset,
+  } = useForm(
+    {
+
+      mode: 'all',
+      defaultValues: {
+        username: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      },
+      criteriaMode: 'all',
+      reValidateMode: 'onBlur',
+      shouldFocusError: true,
+      resolver: yupResolver(validationSchema),
+    });
+
+
+
+  useEffect(() => {
+    console.log(errors)
+  }, [errors]);
+
+
+
+  const isEmptyErrors = !Object.keys(errors).length;
+
+  const errorsPassword = errors?.password?.types?.matches as string || '';
+
+  const watchPasswordField = watch('password');
+
+  function onSubmit(data: any) {
+    if (step < 3) {
+      setStep((i) => i + 1)
+    }
+
+
+    if (step === 3 && isEmptyErrors) {
+      registrationUser(data).then((result) => {
+        const { error } = result as IError || {};
+
+        if (error) {
+          setIsErrors(true)
+        }
+      })
+    }
+  };
+
   function handlerButtonPopup() {
     if (errorReg && status === 400) {
       setIsErrors(false)
@@ -135,110 +172,142 @@ export const Registration = () => {
     }
   }
 
-  const handler = errorReg && status !== 400 ? onSubmit : handlerButtonPopup;
 
-  const content = useMemo(() => {
+  const userNameAttr = register('username');
+  const passwordAttr = register('password');
+
+  console.log(errors)
+
+  const content = function () {
     switch (step) {
       case 1:
         return (
           <React.Fragment>
-            <FormWrapper>
+            <FormWrapper className={errors.username ? 'error' : ''}>
               <InputWrapper>
                 <Input
                   id="userName"
                   placeholder=" "
-                  {...register('username', { required: true })}
-                  type='text' autoComplete="off"
+                  {...userNameAttr}
+                  type='text'
+                  autoComplete="off"
                   name='username'
-                // onFocus={() => {
-                //   // console.log('q')
+                  onFocus={() => {
 
-                //   // clearErrors('username');
-
-
-
-
-                // }}
+                    setIsBlurUsername(false)
+                  }}
+                  onBlur={(event) => {
+                    userNameAttr.onBlur(event);
+                    if (
+                      errors.username?.message
+                    ) {
+                      setIsBlurUsername(true)
+                    }
+                  }}
                 />
                 <InputLabel htmlFor="userName">Придумайте логин для входа</InputLabel>
               </InputWrapper>
             </FormWrapper>
-            {errors?.username?.message && <TextHelperError><span>{errors.username?.message}</span></TextHelperError>}
-            {/* <TextHelper data-test-id='hint' className={errors?.username?.message ? 'error' : ''}>Используйте для логина латинский алфавит и цифры</TextHelper> */}
-            <TextHelper data-test-id='hint'>Используйте для логина латинский алфавит и цифры</TextHelper>
-            <FormWrapper>
+            {errors?.username?.type === 'required'
+              ? <TextHelperError data-test-id='hint'><span>{errors.username?.message}</span></TextHelperError>
+              :
+              (<TextHelper data-test-id='hint'>
+                <ErrorHighlight
+                  className={isBlurUsername ? 'active' : ''}
+                > Используйте для логина <ErrorHighlight className={errors?.username?.message === 'латинский алфавит' ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errors?.username?.message === 'цифры' ? 'active' : ''}>цифры</ErrorHighlight> </ErrorHighlight>
+              </TextHelper>)
+            }
+            <FormWrapper className={errors.password ? 'error' : ''}>
               <InputWrapper>
-                <Input id="password" placeholder=" " {...register('password', { required: true })} type='password' autoComplete="off" name='password' />
+                <Input
+                  id="password"
+                  placeholder=" "
+                  {...passwordAttr}
+                  type={isVisiblePassword ? 'text' : 'password'}
+                  autoComplete="off"
+                  name='password'
+                  onFocus={() => {
+                    setIsBlurPassword(false)
+                  }}
+                  onBlur={(event) => {
+
+                    passwordAttr.onBlur(event)
+
+                    if (errors.password?.message) {
+                      setIsBlurPassword(true)
+                    }
+                  }} />
                 <InputLabel htmlFor="password">Пароль</InputLabel>
+                {isEmptyErrors && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
+                {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
               </InputWrapper>
             </FormWrapper>
-            <TextHelper data-test-id='hint'>Пароль не менее 8 символов, с заглавной буквой и цифрой</TextHelper>
+            {errors?.password?.type === 'required'
+              ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
+              : (
+                <TextHelper data-test-id='hint'><ErrorHighlight className={isBlurPassword ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight></ErrorHighlight> </TextHelper>
+              )}
           </React.Fragment >
         );
       case 2:
         return (
           <React.Fragment>
-            <FormWrapper>
+            <FormWrapper className={errors.firstName ? 'error' : ''}>
               <InputWrapper>
-                <Input id="firstName" placeholder=" " {...register('firstName', { required: true })} type='text' autoComplete="off" name='firstName' />
+                <Input id="firstName" placeholder=" " {...register('firstName')} type='text' autoComplete="off" name='firstName' />
                 <InputLabel htmlFor="firstName">Имя</InputLabel>
               </InputWrapper>
-
             </FormWrapper>
-            <TextHelper data-test-id='hint'>1</TextHelper>
-            <FormWrapper>
+            {errors?.firstName && <TextHelperError data-test-id='hint'><span>{errors.firstName?.message}</span></TextHelperError>}
+            <FormWrapper className={errors.lastName ? 'error' : ''}>
               <InputWrapper>
-                <Input id="lastName" placeholder=" " {...register('lastName', { required: true })} type='text' autoComplete="off" name='lastName' />
+                <Input id="lastName" placeholder=" " {...register('lastName')} type='text' autoComplete="off" name='lastName' />
                 <InputLabel htmlFor="lastName">Фамилия</InputLabel>
               </InputWrapper>
-
             </FormWrapper>
-            <TextHelper data-test-id='hint'>1</TextHelper>
+            {errors?.lastName && <TextHelperError data-test-id='hint'><span>{errors.lastName?.message}</span></TextHelperError>}
           </React.Fragment >
         );
       case 3:
         return (
           <React.Fragment>
-            <FormWrapper>
+            <FormWrapper className={errors.phone ? 'error' : ''}>
               <InputWrapper>
-                <Input id="phone" placeholder=" " {...register('phone', { required: true })} type='phone' autoComplete="off" name='phone' />
+                <InputPhone id="phone" placeholder=" " {...register('phone')} type='phone' autoComplete="off" name='phone' mask='+375 (99) 999-99-99'
+                  maskChar='x'
+                  onFocus={() => setIsFocusPhone(true)}
+                  onBlur={() => setIsFocusPhone(false)} />
                 <InputLabel htmlFor="phone">Номер телефона</InputLabel>
               </InputWrapper>
-
             </FormWrapper>
-            <TextHelper data-test-id='hint'>1</TextHelper>
-            <FormWrapper>
+            {errors.phone && <TextHelperError data-test-id='hint'><span>{errors.phone?.message}</span></TextHelperError>}
+            {isFocusPhone && <TextHelper data-test-id='hint'>В формате +375 (xx) xxx-xx-xx</TextHelper>}
+            <FormWrapper className={errors.email ? 'error' : ''}>
               <InputWrapper>
-                <Input id="email" placeholder=" " {...register('email', { required: true })} autoComplete="off" name='email' />
+                <Input id="email" placeholder=" " {...register('email')} autoComplete="off" name='email' />
                 <InputLabel htmlFor="email">E-mail</InputLabel>
               </InputWrapper>
-
             </FormWrapper>
-            <TextHelper data-test-id='hint'>1</TextHelper>
+            {errors?.email && <TextHelperError data-test-id='hint'><span>{errors.email?.message}</span></TextHelperError>}
           </React.Fragment >
         );
       default:
         return null;
     }
-    // }, [step, register, errors, clearErrors])
-  }, [step, register])
-
-
-
-
-
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id='register-form'>
-
       {isLoading
         ? <Loader />
         : isSuccess || isErrors
-          ? < InfoPopup title={title} text={text} buttonText={buttonText} handler={handler} />
+          ? < InfoPopup data-test-id='status-block' title={title} text={text} buttonText={buttonText} handler={handler} />
           : <> <FormTitle>Регистрация</FormTitle>
             <StepsInfo>{step} шаг из 3</StepsInfo>
-            {content}
-            <FormButton className='step1' onClick={() => handlerClick()} >
+            {content()}
+            <FormButton
+              className={isEmptyErrors ? 'step' : 'dis'}
+              disabled={!isEmptyErrors}>
               {step === 1 ? 'Следующий шаг' : step === 2 ? 'Последний шаг' : 'Зарегистрироваться'}
             </FormButton>
             <BoxInfo>

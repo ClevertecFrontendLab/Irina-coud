@@ -28,9 +28,10 @@ import {
   RatingBox
 } from './book-card.styled';
 
-import { useGetBooksQuery, useGetCategoriesQuery } from '../../../../store/books-info-api';
+import { useGetBooksQuery, useGetCategoriesQuery, useLazyGetBooksQuery } from '../../../../store/books-info-api';
 import { Loader } from '../../../../components/loader/loader';
 import { ErrorPopup } from '../../../../components/error/error';
+import { getLoginToken } from '../../../../utils/get-token';
 
 export const BookCard = () => {
 
@@ -52,16 +53,21 @@ export const BookCard = () => {
 
   const { pathname } = useLocation();
 
+  const token = getLoginToken();
+
   const refetchLocation = pathname.includes(`books/${category}/${bookId}`)
 
-  const { isLoading: isLoadingBooks, isError: booksError, refetch: refetchBooks, isSuccess: isSuccessBooks } = useGetBooksQuery();
-  const { isLoading: isLoadingCategories, isError: categoryError, refetch: refetchCategories, isSuccess: isSuccessCategories } = useGetCategoriesQuery();
+  const [triggerBooks, { isLoading: isLoadingBooks, isError: booksError, isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
+  const { isLoading: isLoadingCategories, isError: categoryError, isSuccess: isSuccessCategories } = useGetCategoriesQuery();
 
   useEffect(() => {
-    refetchBooks()
-  }, [refetchLocation, refetchBooks]);
+    if (token) {
+      triggerBooks()
+    }
 
-  console.log(booksError, categoryError)
+  }, [refetchLocation, triggerBooks, token]);
+
+  console.log(isLoadingBooks, isLoadingCategories)
 
   const card = isSuccessBooks && isSuccessCategories || filteredBooks.length ? filteredBooks.map((card) => (
     <BooksCard key={card.id} data-test-id='card' to={String(card.id)} className={currentDisplay} onClick={() => dispatch(changeIdCurrentBook(String(card.id)))}>
@@ -84,7 +90,7 @@ export const BookCard = () => {
     <React.Fragment>
 
       <BookCardWrapper />
-      {isLoadingBooks && isLoadingCategories && <Loader />}
+      {isLoadingBooks || isLoadingCategories ? <Loader /> : ''}
       {isSuccessBooks && isSuccessCategories && card}
       {booksError || categoryError ? <ErrorPopup /> : ''}
     </React.Fragment>

@@ -31,7 +31,7 @@ export interface IStatusError {
 
 export const Authorization = () => {
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   const token = getLoginToken();
 
@@ -42,6 +42,8 @@ export const Authorization = () => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
   const { status } = error as IStatusError || {};
+
+  const watchPasswordField = watch('password');
 
   useEffect(() => {
     if (token) {
@@ -67,34 +69,31 @@ export const Authorization = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id='auth-form'>
-      {isLoading
-        ? <Loader />
-        : error && status !== 400
-          ? <InfoPopup title='Вход не выполнен' text='Что-то пошло не так. Попробуйте еще раз' buttonText='Повторить' handler={handler} />
-          : (<><FormTitle>Вход в личный кабинет</FormTitle>
-            <FormWrapper className={isError ? 'error' : ''}>
-              <InputWrapper>
-                <Input {...register('identifier', { required: true })} id="identifier" placeholder=" " />
-                <InputLabel htmlFor="identifier">Логин</InputLabel>
-              </InputWrapper>
-
-            </FormWrapper>
-            <FormWrapper className={isError ? 'error' : ''}>
-              <InputWrapper>
-                <Input {...register('password', { required: true })} type={isVisiblePassword ? 'text' : 'password'} id="password" placeholder=" " />
-                <InputLabel htmlFor="password">Пароль</InputLabel>
-                <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />
-              </InputWrapper>
-
-            </FormWrapper>
-            {status === 400
-              ? <TextError onClick={() => navigate('/forgot-pass')}><span>Неверный логин или пароль!</span>Восстановить?</TextError>
-              : <UpdateButton onClick={() => navigate('/forgot-pass')}>Забыли логин или пароль?</UpdateButton>}
-            <FormButton>Вход</FormButton>
-            <BoxInfo>
-              <TextHelp>Нет учётной записи?</TextHelp>
-              <Button onClick={() => handlerClick()}>Регистрация</Button>
-            </BoxInfo></>)}
+      {isLoading && <Loader />}
+      {error && status !== 400
+        ? <InfoPopup data-test-id='status-block' title='Вход не выполнен' text='Что-то пошло не так. Попробуйте еще раз' buttonText='Повторить' handler={handler} />
+        : (<><FormTitle>Bход в личный кабинет</FormTitle>
+          <FormWrapper className={isError ? 'error' : ''}>
+            <InputWrapper>
+              <Input {...register('identifier', { required: true })} id="identifier" placeholder=" " />
+              <InputLabel htmlFor="identifier">Логин</InputLabel>
+            </InputWrapper>
+          </FormWrapper>
+          <FormWrapper className={isError ? 'error' : ''}>
+            <InputWrapper>
+              <Input {...register('password', { required: true })} type={isVisiblePassword ? 'text' : 'password'} id="password" placeholder=" " />
+              <InputLabel htmlFor="password">Пароль</InputLabel>
+              {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
+            </InputWrapper>
+          </FormWrapper>
+          {status === 400
+            ? <TextError onClick={() => navigate('/forgot-pass')}><span>Неверный логин или пароль!</span>Восстановить?</TextError>
+            : <UpdateButton onClick={() => navigate('/forgot-pass')}>Забыли логин или пароль?</UpdateButton>}
+          <FormButton>Вход</FormButton>
+          <BoxInfo>
+            <TextHelp>Нет учётной записи?</TextHelp>
+            <Button onClick={() => handlerClick()}>Регистрация</Button>
+          </BoxInfo></>)}
     </Form>
   )
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import arrow from '../../assets/icon/register-arrow.svg';
 import openEye from '../../assets/icon/open-eye.svg';
 import closeEye from '../../assets/icon/close-eye.svg';
+import check from '../../assets/icon/check.svg';
 
 export const Wrapper = styled.div`
 background: linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%);
@@ -91,12 +92,12 @@ color:#BFC4C9;
 
 `;
 
-export const InputIcon = styled.input`
+export const InputIcon = styled.button`
 position: absolute;
 width: 25px;
 height: 20px;
 top: 19px;
-left: 90%;
+left: 85%;
 cursor: pointer;
 z-index:5;
 &.visible{
@@ -112,7 +113,6 @@ position: absolute;
 top: 19px;
 left: 12px;
 cursor: text;
-/* z-index: -1; */
 `;
 
 export const FormButton = styled.button`
@@ -129,8 +129,11 @@ text-transform: uppercase;
 color: #FFFFFF;
 margin: 16px 0 0 0;
 text-align: center;
-&.step1{
+&.step{
   margin: 24px 0 0 0;
+}
+&.dis{
+  background: #EBEBEB;
 }
     @media screen and (max-width: 330px) {
 font-size: 12px;
@@ -175,4 +178,15 @@ background: url(${arrow}) 60px center / 20px no-repeat;
 export const InputWrapper = styled.div`
     background: #F9F9FA;
     height: 56px;
+`;
+
+export const CheckIcon = styled.button`
+position: absolute;
+width: 25px;
+height: 20px;
+top: 19px;
+left: 75%;
+cursor: pointer;
+z-index:5;
+background: url(${check});
 `

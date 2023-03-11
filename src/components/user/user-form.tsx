@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useForgotPasswordMutation } from '../../store/books-info-api';
 
 import { Authorization } from './authorization/authorization';
 import { ForgotPassword } from './forgot-password/forgot-password';
@@ -13,7 +12,7 @@ export const FormLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // const [ { isSuccess }] = useForgotPasswordMutation();
+  const checkLocation = useLocation().search;
 
   const isRegistrationPage = pathname.includes('registration');
   const isForgotPage = pathname.includes('forgot-pass');
@@ -22,11 +21,11 @@ export const FormLayout = () => {
     <Wrapper>
       <Title>Cleverland </Title>
       <FormBox data-test-id='auth'>
-        {isForgotPage ? (
+        {isForgotPage && !checkLocation && (
           <GoBackBox >
             <GoBackTitle onClick={() => navigate('/auth')}>Вход в личный кабинет</GoBackTitle>
           </GoBackBox>
-        ) : ''}
+        )}
         {isRegistrationPage ? <Registration /> : isForgotPage ? <ForgotPassword /> : <Authorization />}
       </FormBox>
     </Wrapper>

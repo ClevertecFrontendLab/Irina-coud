@@ -141,5 +141,13 @@ export const booksInfoApi = createApi({
   })
 });
 
-export const { useGetBooksQuery, useGetBookQuery, useGetCategoriesQuery, useRegistrationUserMutation, useAuthUserMutation, useForgotPasswordMutation, useResetPasswordMutation } = booksInfoApi;
+export const { useGetBooksQuery,
+  useLazyGetBooksQuery,
+  useLazyGetCategoriesQuery,
+  useGetBookQuery,
+  useGetCategoriesQuery,
+  useRegistrationUserMutation,
+  useAuthUserMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation } = booksInfoApi;
 
