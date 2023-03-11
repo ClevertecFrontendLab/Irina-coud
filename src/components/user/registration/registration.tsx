@@ -125,7 +125,7 @@ export const Registration = () => {
       },
       criteriaMode: 'all',
       reValidateMode: 'onBlur',
-      shouldFocusError: true,
+      shouldFocusError: false,
       resolver: yupResolver(validationSchema),
     });
 
@@ -246,7 +246,7 @@ export const Registration = () => {
                     // }
                   }} />
                 <InputLabel htmlFor="password">Пароль</InputLabel>
-                {isEmptyErrors && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
+                {!errors.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
                 {watchPasswordField && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
               </InputWrapper>
             </FormWrapper>
@@ -258,7 +258,7 @@ export const Registration = () => {
             {errors?.password?.type === 'required' && isBlurPassword
               ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
               : (
-                <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}> Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') && watchPasswordField ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') && watchPasswordField ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') && watchPasswordField ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
+                <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}> Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') && watchPasswordField ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') && watchPasswordField ? 'active' : ''}>заглавной буквой</ErrorHighlight> и <ErrorHighlight className={errorsPassword.includes('цифрой') && watchPasswordField ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
               )}
 
 

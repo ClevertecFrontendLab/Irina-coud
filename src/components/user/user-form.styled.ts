@@ -181,6 +181,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const CheckIcon = styled.button`
+
 position: absolute;
 width: 25px;
 height: 20px;
@@ -189,4 +190,5 @@ left: 75%;
 cursor: pointer;
 z-index:5;
 background: url(${check});
+
 `

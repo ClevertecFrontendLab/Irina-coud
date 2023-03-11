@@ -41,7 +41,7 @@ export const ForgotPassword = () => {
   const schema2 = yup.object().shape({
     password: yup.string()
       .required('Поле не может быть пустым')
-      .matches(/[a-zA-Zа-яА-Я\d].{8,}/, 'не менее 8 символов')
+      .matches(/[a-zA-Zа-яА-Я\d].{7,}/, 'не менее 8 символов')
       .matches(/[А-ЯA-Z]/, 'заглавной буквой')
       .matches(/[\d]/, 'цифрой'),
     passwordConfirmation: yup.string()
@@ -60,12 +60,15 @@ export const ForgotPassword = () => {
       email: ''
     },
     criteriaMode: 'all',
+    reValidateMode: 'onBlur',
+    shouldFocusError: false,
     resolver: yupResolver(validationSchema),
   });
 
   const isEmptyErrors = !Object.keys(errors).length;
 
   const [isBlurPassword, setIsBlurPassword] = useState(false);
+  const [isBlurPasswordConfirmation, setIsBlurPasswordConfirmation] = useState(false);
 
   const [forgotPassword, { isLoading, isError, isSuccess: isSuccessForgot, error }] = useForgotPasswordMutation();
   const [resetPassword, { isLoading: isLoadingReset, isSuccess: isSuccessReset, isError: isErrorReset, reset }] = useResetPasswordMutation();
@@ -83,7 +86,7 @@ export const ForgotPassword = () => {
 
   const isForgotPage = pathname.includes('forgot-pass');
 
-  const { error: systemError } = error as IError || {}
+  // const { error: systemError } = error as IError || {}
 
 
   const code = checkLocation.slice(6);
@@ -125,6 +128,7 @@ export const ForgotPassword = () => {
 
   const passwordAttr = register('password');
   const emailAttr = register('email');
+  const passwordConfirmationAttr = register('passwordConfirmation');
 
   const token = getLoginToken();
 
@@ -136,66 +140,82 @@ export const ForgotPassword = () => {
     }
   }, [navigate, token]);
 
-
+  console.log(isBlurPassword)
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id={checkLocation ? 'reset-password-form' : 'send-email-form'} className={isForgotPage && !checkLocation ? 'forgot' : ''}>
       {isLoading || isLoadingReset
-        && <Loader data-test-id='loader' />}
-      {isSuccessForgot
-        ? <InfoPopup data-test-id='status-block' title='Письмо выслано' text='Перейдите в вашу почту, чтобы воспользоваться подсказками по восстановлению пароля' isNotButton={true} />
-        : isErrorReset
-          ? <InfoPopup data-test-id='status-block' title='Данные не сохранились' text='Что-то пошло не так. Попробуйте ещё раз' buttonText='Повторить' handler={handlerError} />
-          : isSuccessReset
-            ? <InfoPopup data-test-id='status-block' title='Новые данные сохранены' text='Зайдите в личный кабинет, используя свои логин и новый пароль' buttonText='Вход' handler={handlerSuccess} />
-            : (<React.Fragment>
-              <FormTitle>Восстановление</FormTitle>
-              <FormWrapper className={errors.email ? 'error' : ''}>
-                <InputWrapper>
-                  <Input
-                    {...reg}
-                    id={checkLocation ? 'password' : 'email'}
-                    type={!checkLocation ? 'text' : isVisiblePassword ? 'text' : 'password'}
-                    placeholder=" "
-                    onFocus={() => {
-                      setIsBlurPassword(false)
-                    }}
-                    onBlur={(event) => {
-                      reg.onBlur(event)
+        ? <Loader />
+        : isSuccessForgot
+          ? <InfoPopup data-test-id='status-block' title='Письмо выслано' text='Перейдите в вашу почту, чтобы воспользоваться подсказками по восстановлению пароля' isNotButton={true} />
+          : isErrorReset
+            ? <InfoPopup data-test-id='status-block' title='Данные не сохранились' text='Что-то пошло не так. Попробуйте ещё раз' buttonText='Повторить' handler={handlerError} />
+            : isSuccessReset
+              ? <InfoPopup data-test-id='status-block' title='Новые данные сохранены' text='Зайдите в личный кабинет, используя свои логин и новый пароль' buttonText='Вход' handler={handlerSuccess} />
+              : (<React.Fragment>
+                <FormTitle>Восстановление</FormTitle>
+                <FormWrapper className={errors.email ? 'error' : ''}>
+                  <InputWrapper>
+                    <Input
+                      {...reg}
+                      id={checkLocation ? 'password' : 'email'}
+                      type={!checkLocation ? 'text' : isVisiblePassword ? 'text' : 'password'}
+                      placeholder=" "
+                      onFocus={() => {
+                        setIsBlurPassword(false)
+                      }}
+                      onBlur={(event) => {
+                        reg.onBlur(event)
 
-                      // if (errors.password?.message) {
-                      setIsBlurPassword(true)
-                      // }
-                    }}
-                  />
-                  <InputLabel htmlFor={checkLocation ? 'password' : 'email'}>{checkLocation ? 'Новый пароль' : 'Email'}</InputLabel>
-                  {isEmptyErrors && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
-                  {checkLocation && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
-                </InputWrapper>
-              </FormWrapper>
-              {errors?.email ? <TextHelperError data-test-id='hint'><span>{errors?.email?.message}</span></TextHelperError> : error && <TextHelperError data-test-id='hint'><span>{systemError}</span></TextHelperError>}
-              {errors?.password?.type === 'required' && isBlurPassword
-                ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
-                : (checkLocation &&
-                  <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и  <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
-                )}
-              <TextHelper className='forgot' data-test-id='hint'>{!checkLocation && 'На этот email будет отправлено письмо с инструкциями по восстановлению пароля'}</TextHelper>
-              {checkLocation && (<FormWrapper className={isError ? 'error' : ''}>
-                <InputWrapper>
-                  <Input {...register('passwordConfirmation', { required: true })} id="passwordConfirmation" placeholder=" " type={isVisiblePasswordConfirmation ? 'text' : 'password'} />
-                  <InputLabel htmlFor="passwordConfirmation">Повторите пароль</InputLabel>
+                        // if (errors.password?.message) {
+                        setIsBlurPassword(true)
+                        // }
+                      }}
+                    />
+                    <InputLabel htmlFor={checkLocation ? 'password' : 'email'}>{checkLocation ? 'Новый пароль' : 'Email'}</InputLabel>
+                    {/* {!errors?.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />} */}
+                    {!errors.password && watchPasswordField && <CheckIcon data-test-id='checkmark' />}
+                    {checkLocation && <InputIcon data-test-id={isVisiblePassword ? 'eye-opened' : 'eye-closed'} className={isVisiblePassword ? 'visible' : 'hidden'} onClick={() => setIsVisiblePassword(!isVisiblePassword)} type='button' />}
+                  </InputWrapper>
+                </FormWrapper>
+                {errors?.email ? <TextHelperError data-test-id='hint'><span>{errors?.email?.message}</span></TextHelperError> : error && <TextHelperError data-test-id='hint'><span>error</span></TextHelperError>}
+                {errors?.password?.type === 'required' && isBlurPassword
+                  ? <TextHelperError data-test-id='hint'><span>{errors.password?.message}</span></TextHelperError>
+                  : (checkLocation &&
+                    <TextHelper data-test-id='hint' className={isBlurPassword && errors.password ? 'active' : ''}>Пароль <ErrorHighlight className={errorsPassword.includes('не менее 8 символов') ? 'active' : ''}>не менее 8 символов</ErrorHighlight>, с <ErrorHighlight className={errorsPassword.includes('заглавной буквой') ? 'active' : ''}>заглавной буквой</ErrorHighlight> и <ErrorHighlight className={errorsPassword.includes('цифрой') ? 'active' : ''}>цифрой</ErrorHighlight> </TextHelper>
+                  )}
+                <TextHelper className='forgot' data-test-id='hint'>{!checkLocation && 'На этот email будет отправлено письмо с инструкциями по восстановлению пароля'}</TextHelper>
+                {checkLocation && (<FormWrapper className={isError ? 'error' : ''}>
+                  <InputWrapper>
+                    <Input
+                      {...passwordConfirmationAttr}
+                      id="passwordConfirmation"
+                      placeholder=" "
+                      type={isVisiblePasswordConfirmation ? 'text' : 'password'}
+                      onFocus={() => {
+                        setIsBlurPasswordConfirmation(false)
+                      }}
+                      onBlur={(event) => {
+                        passwordConfirmationAttr.onBlur(event)
 
-                  <InputIcon data-test-id={isVisiblePasswordConfirmation ? 'eye-opened' : 'eye-closed'} className={isVisiblePasswordConfirmation ? 'visible' : 'hidden'} onClick={() => setIsVisiblePasswordConfirmation(!isVisiblePasswordConfirmation)} type='button' />
-                </InputWrapper>
-              </FormWrapper>)}
-              {errors?.passwordConfirmation?.type === 'required'
-                ? <TextHelperError data-test-id='hint'><span>{errors.passwordConfirmation?.message}</span></TextHelperError> : !isPasswordsMatch && <TextHelperError data-test-id='hint'><span>Пароли не совпадают</span></TextHelperError>}
-              <FormButton className={!isPasswordsMatch ? 'dis' : isEmptyErrors ? 'step' : 'dis'}
-                disabled={!isEmptyErrors || !isPasswordsMatch}> {checkLocation ? 'Сохранить изменения' : 'Восстановить'}</FormButton>
-              <BoxInfo>
-                <TextHelp data-test-id='hint'>{checkLocation ? 'После сохранения войдите в библиотеку, используя новый пароль' : 'Нет учётной записи?'}</TextHelp>
-                {checkLocation ? '' : <Button onClick={() => navigate('/registration')}>Регистрация</Button>}
-              </BoxInfo>
-            </React.Fragment>)
+                        // if (errors.password?.message) {
+                        setIsBlurPasswordConfirmation(true)
+                        // }
+                      }}
+                    />
+                    <InputLabel htmlFor="passwordConfirmation">Повторите пароль</InputLabel>
+
+                    <InputIcon data-test-id={isVisiblePasswordConfirmation ? 'eye-opened' : 'eye-closed'} className={isVisiblePasswordConfirmation ? 'visible' : 'hidden'} onClick={() => setIsVisiblePasswordConfirmation(!isVisiblePasswordConfirmation)} type='button' />
+                  </InputWrapper>
+                </FormWrapper>)}
+                {errors?.passwordConfirmation?.type === 'required'
+                  ? <TextHelperError data-test-id='hint'><span>{errors.passwordConfirmation?.message}</span></TextHelperError> : !isPasswordsMatch && watchPasswordConfirmation && isBlurPasswordConfirmation && <TextHelperError data-test-id='hint'><span>Пароли не совпадают</span></TextHelperError>}
+                <FormButton className={!isPasswordsMatch ? 'dis' : isEmptyErrors ? 'step' : 'dis'}
+                  disabled={!isEmptyErrors || !isPasswordsMatch}> {checkLocation ? 'сохранить изменения' : 'восстановить'}</FormButton>
+                <BoxInfo>
+                  <TextHelp data-test-id='hint'>{checkLocation ? 'После сохранения войдите в библиотеку, используя новый пароль' : 'Нет учётной записи?'}</TextHelp>
+                  {checkLocation ? '' : <Button onClick={() => navigate('/registration')}>Регистрация</Button>}
+                </BoxInfo>
+              </React.Fragment>)
       }
     </Form >
   )

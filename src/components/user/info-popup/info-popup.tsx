@@ -1,5 +1,4 @@
-
-import { IPayloadAuth, IPayloadRegister, IResponseAuth } from "../../../store/books-info-api";
+import { IPayloadAuth, IPayloadRegister } from "../../../store/books-info-api";
 import { Popup, PopupButton, PopupText, PopupTitle } from "./info-popup.styled";
 
 
