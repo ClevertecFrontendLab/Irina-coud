@@ -15,3 +15,4 @@ export const InfoPopup = ({ title, text, buttonText, handlerClick = () => { }, i
     {isNotButton ? '' : <PopupButton onClick={handlerClick}>{buttonText}</PopupButton>}
   </Popup>
 );
+
