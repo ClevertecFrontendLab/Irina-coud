@@ -34,18 +34,22 @@ export const Header = () => {
 
   const { isBurgerMenuOpen } = useSelector((state: IState) => state.reducer);
 
+  const unAuthorizedUser = useDeleteToken();
+
   function toggleBurgerMenu() {
     dispatch(changeBurgerMenu(!isBurgerMenuOpen));
   };
-
-  const unAuthorizedUser = useDeleteToken();
 
   return (
     <HeaderWrapper className={isOpenUserBox ? 'open' : ''}>
       <HeaderContent>
         <HeaderLogoBox>
           <HeaderLogoLink to='/'><img src={logo} alt='logo' /></HeaderLogoLink>
-          <HeaderBurger data-menu="toggle" onClick={() => toggleBurgerMenu()} className={isBurgerMenuOpen ? 'active' : ''} data-test-id='button-burger'>
+          <HeaderBurger
+            data-menu="toggle"
+            onClick={() => toggleBurgerMenu()}
+            className={isBurgerMenuOpen ? 'active' : ''}
+            data-test-id='button-burger'>
             <span />
           </HeaderBurger>
           <Burger />
@@ -53,13 +57,14 @@ export const Header = () => {
         </HeaderLogoBox>
         <HeaderUserBox>
           <HeaderWelcome >Привет, Иван!</HeaderWelcome>
-          <UserLogo src={avatar} alt='avatar' onClick={() => setIsOpenUserBox(!isOpenUserBox)} />
-
+          <UserLogo
+            src={avatar}
+            alt='avatar'
+            onClick={() => setIsOpenUserBox(!isOpenUserBox)} />
         </HeaderUserBox>
         <UserBox className={isOpenUserBox ? 'open' : ''} >
           <UserBoxList>
             <NavigateItem>Профиль</NavigateItem>
-            {/* <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem> */}
             <NavigateItem onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
           </UserBoxList>
         </UserBox>

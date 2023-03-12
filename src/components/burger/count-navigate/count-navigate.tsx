@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
+
 import { IBooksCategories, IState } from "../../../store/reducers/type";
 import { NavigateBooksCount } from "./count-navigate.styled";
-
 
 export const CountNavigate = (props: IBooksCategories) => {
 

@@ -1,14 +1,15 @@
 import { RefObject, useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useOnClickOutside } from '../../utils/click-outside';
 import { useDeleteToken } from '../../utils/delete-token';
+import { getLoginToken } from '../../utils/get-token';
 
-import { useGetBooksQuery, useGetCategoriesQuery, useLazyGetBooksQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
+import { useLazyGetBooksQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
 import { changeBurgerMenu, changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IState } from '../../store/reducers/type';
 
@@ -23,7 +24,6 @@ import {
   NavigateList,
   NavigateProfile,
 } from './burger.styled';
-import { getLoginToken } from '../../utils/get-token';
 
 export const Burger = () => {
 
@@ -41,6 +41,21 @@ export const Burger = () => {
 
   const nav = useRef() as RefObject<HTMLDivElement>;
 
+  const token = getLoginToken();
+
+  const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
+  const [triggerBooks, { isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
+
+  const unAuthorizedUser = useDeleteToken();
+
+  useEffect(() => {
+    if (token) {
+      triggerCategories();
+      triggerBooks();
+    }
+  }, [triggerCategories, triggerBooks, token]);
+
+
   function clickOtherButtonAccordion(event: { currentTarget: any }) {
     if (isSelectedBook) {
       dispatch(changeOpenCategory(!isOpenCategory))
@@ -53,34 +68,6 @@ export const Burger = () => {
       dispatch(changeBurgerMenu(!isBurgerMenuOpen));
     }
   });
-
-  // const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
-  // const { isSuccess: isSuccessBooks } = useGetBooksQuery();
-
-  // const token = getLoginToken();
-
-  // useEffect(() => {
-  //   if (token) {
-  //     triggerCategories()
-  //   }
-
-  // }, [triggerCategories, token]);
-
-
-  const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
-  const [triggerBooks, { isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
-
-  const token = getLoginToken();
-
-  useEffect(() => {
-    if (token) {
-      triggerCategories();
-      triggerBooks();
-    }
-  }, [triggerCategories, triggerBooks, token]);
-
-
-
 
   function handlerClick(event: React.MouseEvent<HTMLElement>) {
     const payload = event.currentTarget.dataset.info as string;
@@ -97,11 +84,6 @@ export const Burger = () => {
     dispatch(changeBurgerMenu(!isBurgerMenuOpen));
     dispatch(changeCurrentCategory(String(event.currentTarget.innerHTML)));
   };
-
-  const navigate = useNavigate();
-
-  const unAuthorizedUser = useDeleteToken();
-
 
   return (
     <NavigateContainer

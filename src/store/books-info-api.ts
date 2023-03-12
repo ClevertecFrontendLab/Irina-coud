@@ -44,6 +44,13 @@ export interface IError {
   }
 }
 
+export interface IPayloadReset {
+  password?: string,
+  passwordConfirmation?: string,
+  code?: string,
+  email?: string,
+}
+
 export const booksInfoApi = createApi({
   reducerPath: 'booksInfoApi',
   tagTypes: ['books', 'categories'],
@@ -150,4 +157,3 @@ export const { useGetBooksQuery,
   useAuthUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation } = booksInfoApi;
-

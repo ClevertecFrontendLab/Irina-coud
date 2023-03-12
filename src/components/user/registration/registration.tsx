@@ -5,11 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 
-
-import { IError, useRegistrationUserMutation } from '../../../store/books-info-api';
-import { getLoginToken } from '../../../utils/get-token';
 import { Loader } from '../../loader/loader';
 import { InfoPopup } from '../info-popup/info-popup';
+
+import {
+  CHECK_BY_PHONE_NUMBER,
+  CHECK_CAPITAL_LETTER,
+  CHECK_EMAIL,
+  CHECK_LATIN_LETTERS,
+  CHECK_MIN_LENGTH_PASSWORD,
+  CHECK_NUMBERS
+} from '../../../constants';
+
+import { IError, IPayloadRegister, useRegistrationUserMutation } from '../../../store/books-info-api';
+import { getLoginToken } from '../../../utils/get-token';
 
 import {
   BoxInfo,
@@ -33,7 +42,6 @@ import {
 } from './registration.styled';
 import { TextHelperError } from '../forgot-password/forgot-password.styled';
 
-
 export interface IStatusError {
   status: number;
   name: string;
@@ -47,23 +55,22 @@ export const Registration = () => {
 
   const navigate = useNavigate();
 
-
   const [step, setStep] = useState(1);
   const [isErrors, setIsErrors] = useState(false);
   const [isBlurUsername, setIsBlurUsername] = useState(false);
   const [isBlurPassword, setIsBlurPassword] = useState(false);
   const [isFocusPhone, setIsFocusPhone] = useState(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+
   const token = getLoginToken();
-
-  const { status } = errorReg as IStatusError || {};
-
 
   useEffect(() => {
     if (token) {
       navigate('/');
     }
   }, [navigate, token]);
+
+  const { status } = errorReg as IStatusError || {};
 
   const title = errorReg ? 'Данные не сохранились' : 'Регистрация успешна';
   const text = errorReg && status === 400
@@ -77,20 +84,19 @@ export const Registration = () => {
       ? 'Повторить'
       : 'Вход';
 
-
-  const handler = errorReg && status !== 400 ? onSubmit : handlerButtonPopup;
+  const handler = () => errorReg && status !== 400 ? handleSubmit(onSubmit) : handlerButtonPopup();
 
   const schema1 = yup.object().shape({
     username: yup.string()
       .required('Поле не может быть пустым')
-      .matches(/[a-zA-Z]/, 'латинский алфавит')
-      .matches(/[\d]/, 'цифры')
+      .matches(CHECK_LATIN_LETTERS, 'латинский алфавит')
+      .matches(CHECK_NUMBERS, 'цифры')
     ,
     password: yup.string()
       .required('Поле не может быть пустым')
-      .matches(/[a-zA-Zа-яА-Я\d].{7,}/, 'не менее 8 символов')
-      .matches(/[А-ЯA-Z]/, 'заглавной буквой')
-      .matches(/[\d]/, 'цифрой'),
+      .matches(CHECK_MIN_LENGTH_PASSWORD, 'не менее 8 символов')
+      .matches(CHECK_CAPITAL_LETTER, 'заглавной буквой')
+      .matches(CHECK_NUMBERS, 'цифрой'),
   })
   const schema2 = yup.object().shape({
     firstName: yup.string().required('Поле не может быть пустым'),
@@ -98,9 +104,9 @@ export const Registration = () => {
   })
   const schema3 = yup.object().shape({
     phone: yup.string().required('Поле не может быть пустым')
-      .matches(/^\+?375((\s\(33\)\s\d{3}-\d{2}-\d{2})|(\s\(29\)\s\d{3}-\d{2}-\d{2})|(\s\(44\)\s\d{3}-\d{2}-\d{2})|(\s\(25\)\s\d{3}-\d{2}-\d{2}))\s*$/, 'В формате +375 (xx) xxx-xx-xx'),
+      .matches(CHECK_BY_PHONE_NUMBER, 'В формате +375 (xx) xxx-xx-xx'),
     email: yup.string().required('Поле не может быть пустым')
-      .matches(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i, 'Введите корректный e-mail'),
+      .matches(CHECK_EMAIL, 'Введите корректный e-mail'),
   })
 
   const validationSchema = step === 1 ? schema1 : step === 2 ? schema2 : schema3;
@@ -129,8 +135,6 @@ export const Registration = () => {
       resolver: yupResolver(validationSchema),
     });
 
-
-
   const isEmptyErrors = !Object.keys(errors).length;
 
   const errorsPassword = errors?.password?.types?.matches as string || '';
@@ -139,11 +143,10 @@ export const Registration = () => {
   const watchPasswordField = watch('password');
   const watchUsernameField = watch('username');
 
-  function onSubmit(data: any) {
+  function onSubmit(data: IPayloadRegister) {
     if (step < 3) {
       setStep((i) => i + 1)
     }
-
 
     if (step === 3 && isEmptyErrors) {
       registrationUser(data).then((result) => {
@@ -163,17 +166,14 @@ export const Registration = () => {
       setStep(1)
       reset()
     }
+
     if (!errorReg && status !== 400) {
       navigate('/auth')
     }
   }
 
-
   const userNameAttr = register('username');
   const passwordAttr = register('password');
-
-  console.log(errors.username?.message)
-  console.log(errors)
 
   const content = function () {
     switch (step) {
@@ -190,12 +190,10 @@ export const Registration = () => {
                   autoComplete="off"
                   name='username'
                   onFocus={() => {
-
                     setIsBlurUsername(false)
                   }}
                   onBlur={(event) => {
                     userNameAttr.onBlur(event);
-
                     setIsBlurUsername(true)
                   }}
                 />
@@ -204,9 +202,10 @@ export const Registration = () => {
             </FormWrapper>
             {errors?.username?.type === 'required' && isBlurUsername
               ? <TextHelperError data-test-id='hint'><span>{errors.username?.message}</span></TextHelperError>
-              :
-              (<TextHelper data-test-id='hint' className={isBlurUsername && errors.username ? 'active' : ''}>
-                Используйте для логина <ErrorHighlight className={errorsUsername.includes('латинский алфавит') && watchUsernameField ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errorsUsername.includes('цифры') && watchUsernameField ? 'active' : ''}>цифры</ErrorHighlight>
+              : (<TextHelper data-test-id='hint' className={isBlurUsername && errors.username ? 'active' : ''}>
+                Используйте для логина
+                <ErrorHighlight
+                  className={errorsUsername.includes('латинский алфавит') && watchUsernameField ? 'active' : ''}>латинский алфавит</ErrorHighlight> и <ErrorHighlight className={errorsUsername.includes('цифры') && watchUsernameField ? 'active' : ''}>цифры</ErrorHighlight>
               </TextHelper>)
             }
             <FormWrapper className={errors.password ? 'error' : ''}>
@@ -290,7 +289,7 @@ export const Registration = () => {
       {isLoading
         ? <Loader />
         : isSuccess || isErrors
-          ? < InfoPopup data-test-id='status-block' title={title} text={text} buttonText={buttonText} handler={handler} />
+          ? < InfoPopup data-test-id='status-block' title={title} text={text} buttonText={buttonText} handlerClick={handler} />
           : <> <FormTitle>Регистрация</FormTitle>
             <StepsInfo>{step} шаг из 3</StepsInfo>
             {content()}

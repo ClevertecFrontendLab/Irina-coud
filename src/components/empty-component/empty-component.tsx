@@ -9,5 +9,4 @@ export const EmptyComponent = ({ text, testId }: IEmptyComponent) => (
   <EmptyWrapper>
     <EmptyMessage data-test-id={testId}>{text}</EmptyMessage>
   </EmptyWrapper>
-)
-  ;
+);

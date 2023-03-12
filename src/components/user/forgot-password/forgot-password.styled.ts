@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import goBack from '../../../assets/icon/go-back.svg';
@@ -9,7 +10,7 @@ height: 64px;
 border-radius: 16px 16px 0 0;
 `;
 
-export const GoBackTitle = styled.button`
+export const GoBackTitle = styled(Link)`
 font-weight: 600;
 font-size: 12px;
 line-height: 18px;

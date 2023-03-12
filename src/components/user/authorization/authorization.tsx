@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { IError, useAuthUserMutation } from '../../../store/books-info-api';
 
-
-
-import { getLoginToken } from '../../../utils/get-token';
 import { Loader } from '../../loader/loader';
 import { InfoPopup } from '../info-popup/info-popup';
+
+import { IError, IPayloadAuth, useAuthUserMutation } from '../../../store/books-info-api';
+import { getLoginToken } from '../../../utils/get-token';
+
 import {
   BoxInfo,
   Button,
@@ -37,8 +36,6 @@ export interface IStatusError {
 
 export const Authorization = () => {
 
-
-
   const schema = yup.object().shape({
     identifier: yup.string()
       .required('Поле не может быть пустым')
@@ -49,7 +46,6 @@ export const Authorization = () => {
 
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm({
-
     mode: 'all',
     defaultValues: {
       identifier: '',
@@ -78,7 +74,7 @@ export const Authorization = () => {
     }
   }, [navigate, token]);
 
-  function onSubmit(data: any) {
+  function onSubmit(data: IPayloadAuth) {
     authUser(data).then((result) => {
 
       const { error } = result as IError || {};
@@ -92,14 +88,15 @@ export const Authorization = () => {
     navigate('/registration')
   };
 
-  const handler = onSubmit;
-
+  const handler = () => {
+    handleSubmit(onSubmit)
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} data-test-id='auth-form'>
       {isLoading && <Loader />}
       {error && status !== 400
-        ? <InfoPopup data-test-id='status-block' title='Вход не выполнен' text='Что-то пошло не так. Попробуйте еще раз' buttonText='Повторить' handler={handler} />
+        ? <InfoPopup data-test-id='status-block' title='Вход не выполнен' text='Что-то пошло не так. Попробуйте еще раз' buttonText='Повторить' handlerClick={handler} />
         : (<><FormTitle>Bход в личный кабинет</FormTitle>
           <FormWrapper className={errors.identifier ? 'error' : ''}>
             <InputWrapper>
