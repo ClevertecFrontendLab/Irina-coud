@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, ReactEventHandler, RefObject, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
@@ -6,8 +6,10 @@ import { useLocation, useParams } from 'react-router-dom';
 import { CountNavigate } from './count-navigate/count-navigate';
 
 import { useOnClickOutside } from '../../utils/click-outside';
+import { useDeleteToken } from '../../utils/delete-token';
+import { getLoginToken } from '../../utils/get-token';
 
-import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
+import { useLazyGetBooksQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
 import { changeBurgerMenu, changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IState } from '../../store/reducers/type';
 
@@ -39,6 +41,21 @@ export const Burger = () => {
 
   const nav = useRef() as RefObject<HTMLDivElement>;
 
+  const token = getLoginToken();
+
+  const [triggerCategories, { data = [], isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
+  const [triggerBooks, { isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
+
+  const unAuthorizedUser = useDeleteToken();
+
+  useEffect(() => {
+    if (token) {
+      triggerCategories();
+      triggerBooks();
+    }
+  }, [triggerCategories, triggerBooks, token]);
+
+
   function clickOtherButtonAccordion(event: { currentTarget: any }) {
     if (isSelectedBook) {
       dispatch(changeOpenCategory(!isOpenCategory))
@@ -51,9 +68,6 @@ export const Burger = () => {
       dispatch(changeBurgerMenu(!isBurgerMenuOpen));
     }
   });
-
-  const { data = [], isSuccess: isSuccessCategories } = useGetCategoriesQuery();
-  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
   function handlerClick(event: React.MouseEvent<HTMLElement>) {
     const payload = event.currentTarget.dataset.info as string;
@@ -79,7 +93,7 @@ export const Burger = () => {
         className={isOpenCategory ? 'open' : ''}
       >
         <NavigateItem
-          onClick={() => handlerClick}
+          onClick={(event) => handlerClick(event)}
           data-info='books'>
           <NavigateLinkItem
             to='books/all'
@@ -134,7 +148,7 @@ export const Burger = () => {
       </NavigateList>
       <NavigateProfile>
         <NavigateItem>Профиль</NavigateItem>
-        <NavigateItem>Выход</NavigateItem>
+        <NavigateItem data-test-id='exit-button' onClick={() => unAuthorizedUser()}>Выход</NavigateItem>
       </NavigateProfile>
     </NavigateContainer>
   );

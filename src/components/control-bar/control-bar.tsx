@@ -25,6 +25,9 @@ export const ControlBar = () => {
 
   const { isActiveTail, isActiveList, isSearchActive, isSortActive } = useSelector((state: IState) => state.reducer);
 
+  const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
+  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
+
   function handlerClick(event: React.MouseEvent<HTMLElement>) {
     const current = event.currentTarget.id;
 
@@ -32,9 +35,6 @@ export const ControlBar = () => {
       dispatch(changeDisplay(true))
     }
   }
-
-  const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
-  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
 
   return (
     <ControlBarWrapper>
@@ -49,13 +49,36 @@ export const ControlBar = () => {
           onChange={(event) =>
             dispatch(changeSearchValue(String(event.currentTarget.value)))
           } />
-        <StyleCloseIcon className={isSearchActive ? 'active' : ''} onClick={() => dispatch(changeActiveSearch(!isSearchActive))} data-test-id='button-search-close' />
-        <ControlBarSort className={isSortActive ? '' : 'change'} onClick={() => dispatch(changeActiveSort(!isSortActive))} data-test-id='sort-rating-button' ><span>По рейтингу</span></ControlBarSort>
+        <StyleCloseIcon
+          className={isSearchActive ? 'active' : ''}
+          onClick={() => dispatch(changeActiveSearch(!isSearchActive))}
+          data-test-id='button-search-close' />
+        <ControlBarSort
+          className={isSortActive ? '' : 'change'}
+          onClick={() => dispatch(changeActiveSort(!isSortActive))}
+          data-test-id='sort-rating-button' >
+          <span>По рейтингу</span>
+        </ControlBarSort>
       </ControlBarFilters>
         <ControlBarDisplay>
-          <ControlButtonDisplay data-test-id='button-menu-view-window' onClick={(e) => handlerClick(e)} id='tail' background={isActiveTail ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : 'white'}><StyleTailIcon color={isActiveTail ? 'white' : '#A7A7A7'} /></ControlButtonDisplay>
-          <ControlButtonDisplay data-test-id='button-menu-view-list' onClick={(e) => handlerClick(e)} id='list' background={isActiveList ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : 'white'}><StyleListIcon color={isActiveList ? 'white' : '#A7A7A7'} /></ControlButtonDisplay>
-        </ControlBarDisplay></React.Fragment>) : ''}
+          <ControlButtonDisplay
+            data-test-id='button-menu-view-window'
+            onClick={(e) => handlerClick(e)}
+            id='tail'
+            background={isActiveTail ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : 'white'}>
+            <StyleTailIcon
+              color={isActiveTail ? 'white' : '#A7A7A7'} />
+          </ControlButtonDisplay>
+          <ControlButtonDisplay
+            data-test-id='button-menu-view-list'
+            onClick={(e) => handlerClick(e)}
+            id='list'
+            background={isActiveList ? 'linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%)' : 'white'}>
+            <StyleListIcon
+              color={isActiveList ? 'white' : '#A7A7A7'} />
+          </ControlButtonDisplay>
+        </ControlBarDisplay>
+      </React.Fragment>) : ''}
     </ControlBarWrapper>
   )
 };

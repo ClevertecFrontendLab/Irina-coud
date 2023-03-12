@@ -1,0 +1,1 @@
+export const getLoginToken = () => document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');

@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
 import { CountNavigate } from './count-navigate/count-navigate';
 
-import { useGetBooksQuery, useGetCategoriesQuery } from '../../store/books-info-api';
+import { useLazyGetBooksQuery, useLazyGetCategoriesQuery } from '../../store/books-info-api';
 import { changeCurrentCategory, changeMenu, changeOpenCategory } from '../../store/reducers/main-slice';
 import { IBooksCategories, IState } from '../../store/reducers/type';
 
@@ -18,6 +19,8 @@ import {
   NavigateList,
   NavigateProfile,
 } from './navigate.styled';
+import { getLoginToken } from '../../utils/get-token';
+
 
 export const Navigate = () => {
 
@@ -33,6 +36,11 @@ export const Navigate = () => {
 
   const { isOpenCategory, booksCategories } = useSelector((state: IState) => state.reducer);
 
+  const [triggerCategories, { isSuccess: isSuccessCategories }] = useLazyGetCategoriesQuery();
+  const [triggerBooks, { isSuccess: isSuccessBooks }] = useLazyGetBooksQuery();
+
+  const token = getLoginToken();
+
   function handlerClick(event: React.MouseEvent<HTMLElement>) {
     const payload = event.currentTarget.dataset.info as string;
 
@@ -44,12 +52,16 @@ export const Navigate = () => {
     }
   }
 
-  const { isSuccess: isSuccessCategories } = useGetCategoriesQuery();
-  const { isSuccess: isSuccessBooks } = useGetBooksQuery();
-
   function handlerClickCategory(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     dispatch(changeCurrentCategory(String(event.currentTarget.innerHTML)));
   };
+
+  useEffect(() => {
+    if (token) {
+      triggerCategories();
+      triggerBooks();
+    }
+  }, [triggerCategories, triggerBooks, token]);
 
   return (
     <NavigateContainer>

@@ -50,13 +50,15 @@ export const Slider = (props: ISliderImage) => {
           }}
           data-test-id='slide-big'>
           {url.map((item) => (
-            <StyledSwiperSlide data-test-id='slide-mini'><ImageSlider src={item.url ? `${LINK_HOST}${item.url}` : `${emptyCat}`} alt='sliderImage' /></StyledSwiperSlide>
+            <StyledSwiperSlide
+              data-test-id='slide-mini'>
+              <ImageSlider src={item.url ? `${LINK_HOST}${item.url}` : `${emptyCat}`} alt='sliderImage' />
+            </StyledSwiperSlide>
           ))}
         </StyledMainSwiper>
       </StyledSwiperWrapper>
       {url.length > 1 ? (
         <StyledScrollSwiperWrapper>
-
           <Swiper
             onSwiper={setThumbsSwiper}
             spaceBetween={30}
@@ -71,7 +73,10 @@ export const Slider = (props: ISliderImage) => {
             data-test-id='slide-mini'
           >
             {url.map((item) => (
-              <StyledSwiperSlide data-test-id='slide-mini'><img src={item.url ? `${LINK_HOST}${item.url}` : ''} alt='sliderImage' height='86' /></StyledSwiperSlide>
+              <StyledSwiperSlide
+                data-test-id='slide-mini'>
+                <img src={item.url ? `${LINK_HOST}${item.url}` : ''} alt='sliderImage' height='86' />
+              </StyledSwiperSlide>
             ))}
           </Swiper>
         </StyledScrollSwiperWrapper>
