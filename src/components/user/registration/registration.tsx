@@ -84,7 +84,7 @@ export const Registration = () => {
       ? 'Повторить'
       : 'Вход';
 
-  const handler = () => errorReg && status !== 400 ? handleSubmit(onSubmit) : handlerButtonPopup();
+
 
   const schema1 = yup.object().shape({
     username: yup.string()
@@ -174,6 +174,8 @@ export const Registration = () => {
 
   const userNameAttr = register('username');
   const passwordAttr = register('password');
+
+  const handler = () => errorReg && status !== 400 ? handleSubmit(onSubmit) : handlerButtonPopup();
 
   const content = function () {
     switch (step) {
